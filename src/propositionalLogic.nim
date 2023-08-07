@@ -20,7 +20,7 @@ type
 
 let
   TOP* = TruthVaue(value: true)
-  BOTOM* = TruthVaue(value: false)
+  BOTTOM* = TruthVaue(value: false)
 
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
   PropLogicFormula(
@@ -63,9 +63,9 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
     )
   of PropFormulaType.notProp:
     TruthVaue(
-      value: formula.formula.eval(interpretation) == BOTOM
+      value: formula.formula.eval(interpretation) == BOTTOM
     )
   of PropFormulaType.impliesProp:
     TruthVaue(
-      value: formula.antecedent.eval(interpretation) == BOTOM or formula.consequent.eval(interpretation) == TOP
+      value: formula.antecedent.eval(interpretation) == BOTTOM or formula.consequent.eval(interpretation) == TOP
     )
