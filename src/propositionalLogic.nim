@@ -23,6 +23,7 @@ type
 let
   TOP* = TruthVaue(value: true)
   BOTTOM* = TruthVaue(value: false)
+var nextPropId: int = 0
 
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
   PropLogicFormula(
@@ -72,11 +73,12 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
       value: formula.antecedent.eval(interpretation) == BOTTOM or formula.consequent.eval(interpretation) == TOP
     )
 
-proc generateAtomicProp*(id: int): PropLogicFormula = 
-  PropLogicFormula(
+proc generateAtomicProp*(): PropLogicFormula = 
+  result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
-    id: id
+    id: nextPropId
   )
+  nextPropId += 1
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation).value == TOP.value
