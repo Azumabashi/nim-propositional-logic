@@ -75,3 +75,6 @@ proc generateAtomicProp*(id: int): PropLogicFormula =
     formulaType: PropFormulaType.atomicProp,
     id: id
   )
+
+proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
+  formula.eval(interpretation).value == TOP.value
