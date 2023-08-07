@@ -4,3 +4,5 @@ type
     id*: int
   AndFormula* = ref object of PropLogicFormula
     left*, right*: PropLogicFormula
+  OrFormula* = ref object of PropLogicFormula
+    left*, right*: PropLogicFormula
