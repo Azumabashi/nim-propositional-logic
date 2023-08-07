@@ -3,11 +3,11 @@ import sequtils
 import sets
 
 type
-  PropFormulaType* {.pure.} = enum
+  PropFormulaType {.pure.} = enum
     atomicProp, andProp, orProp, notProp, impliesProp
   PropLogicFormula* = ref object
     # cf. https://github.com/momeemt/minim/blob/main/src/minim/asts.nim#L16-L47
-    case formulaType*: PropFormulaType
+    case formulaType: PropFormulaType
     of PropFormulaType.atomicProp:
       id*: int
     of PropFormulaType.andProp, PropFormulaType.orProp:
