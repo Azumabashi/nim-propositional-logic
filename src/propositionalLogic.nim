@@ -6,3 +6,5 @@ type
     left*, right*: PropLogicFormula
   OrFormula* = ref object of PropLogicFormula
     left*, right*: PropLogicFormula
+  NotFormula* = ref object of PropLogicFormula
+    formula*: PropLogicFormula
