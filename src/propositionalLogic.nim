@@ -16,3 +16,6 @@ proc `&`* (left, right: PropLogicFormula): AndFormula =
 
 proc `|`*(left, right: PropLogicFormula): OrFormula = 
   OrFormula(left: left, right: right)
+
+proc `!`*(formula: PropLogicFormula): NotFormula =
+  NotFormula(formula: formula)
