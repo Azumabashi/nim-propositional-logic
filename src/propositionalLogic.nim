@@ -1,4 +1,6 @@
 import tables
+import sequtils
+import sets
 
 type
   PropFormulaType* {.pure.} = enum
@@ -78,3 +80,14 @@ proc generateAtomicProp*(id: int): PropLogicFormula =
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation).value == TOP.value
+
+proc getAllInterpretations*(props: HashSet[PropLogicFormula]): seq[Interpretation] = 
+  let 
+    numberOfFormulae = props.len
+    numberOfInterpretation = 1 shl numberOfFormulae
+    allPropIds = props.toSeq.filterIt(it.formulaType == PropFormulaType.atomicProp).mapIt(it.id)
+  for pattern in 0..<numberOfInterpretation:
+    var interpretation = initTable[int, TruthVaue]()
+    for idx in 0..<numberOfFormulae:
+      interpretation[allPropIds[idx]] = if (pattern and (1 shl idx)) > 0: TOP else: BOTTOM
+    result.add(interpretation)
