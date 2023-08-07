@@ -10,3 +10,6 @@ type
     formula*: PropLogicFormula
   ImpliesFormula* = ref object of PropLogicFormula
     antecedent*, consequent*: PropLogicFormula
+
+proc `&`* (left, right: PropLogicFormula): AndFormula = 
+  AndFormula(left: left, right: right)
