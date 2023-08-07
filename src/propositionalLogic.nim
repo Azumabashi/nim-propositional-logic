@@ -52,6 +52,9 @@ proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
     consequent: consequent
   )
 
+proc `==`*(left, right: TruthVaue): bool =
+  left.value == right.value
+
 proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue = 
   case formula.formulaType
   of PropFormulaType.atomicProp:
@@ -81,7 +84,7 @@ proc generateAtomicProp*(): PropLogicFormula =
   nextPropId += 1
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
-  formula.eval(interpretation).value == TOP.value
+  formula.eval(interpretation) == TOP
 
 proc getAllInterpretations*(propsId: HashSet[int]): seq[Interpretation] = 
   let 
