@@ -15,6 +15,10 @@ type
   TruthVaue* = ref object
     value*: bool
 
+let
+  TOP* = TruthVaue(value: true)
+  BOTOM* = TruthVaue(value: false)
+
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
   PropLogicFormula(
     formulaType: PropFormulaType.andProp,
