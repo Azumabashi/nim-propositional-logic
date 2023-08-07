@@ -5,12 +5,12 @@ import propositionalLogic
 suite "check satisfiability under specific interpretation":
   setup:
     let 
+      P = generateAtomicProp()
+      Q = generateAtomicProp()
       interpretation = {
-        1: TOP,
-        2: BOTTOM
+        P.id: TOP,
+        Q.id: BOTTOM
       }.toTable
-      P = generateAtomicProp(1)
-      Q = generateAtomicProp(2)
   
   test "excluded middle law":
     let formula = P | (!P)
