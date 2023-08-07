@@ -1,3 +1,5 @@
+import tables
+
 type
   PropFormulaType* {.pure.} = enum
     atomicProp, andProp, orProp, notProp, impliesProp
@@ -14,6 +16,7 @@ type
       antecedent*, consequent*: PropLogicFormula
   TruthVaue* = ref object
     value*: bool
+  Interpretation* = Table[int, TruthVaue]
 
 let
   TOP* = TruthVaue(value: true)
@@ -46,10 +49,10 @@ proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
     consequent: consequent
   )
 
-proc eval*(formula: PropLogicFormula, interpretation: proc(f: PropLogicFormula): TruthVaue): TruthVaue = 
+proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue = 
   case formula.formulaType
   of PropFormulaType.atomicProp:
-    interpretation(formula)
+    interpretation[formula.id]
   of PropFormulaType.andProp:
     TruthVaue(
       value: formula.left.eval(interpretation) == TOP and formula.right.eval(interpretation) == TOP
