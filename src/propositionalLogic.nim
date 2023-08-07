@@ -13,3 +13,6 @@ type
 
 proc `&`* (left, right: PropLogicFormula): AndFormula = 
   AndFormula(left: left, right: right)
+
+proc `|`*(left, right: PropLogicFormula): OrFormula = 
+  OrFormula(left: left, right: right)
