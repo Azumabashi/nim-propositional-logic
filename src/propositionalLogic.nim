@@ -23,7 +23,6 @@ type
 let
   TOP* = TruthVaue(value: true)
   BOTTOM* = TruthVaue(value: false)
-var nextPropId: int = 0
 
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
   PropLogicFormula(
@@ -76,26 +75,29 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
       value: formula.antecedent.eval(interpretation) == BOTTOM or formula.consequent.eval(interpretation) == TOP
     )
 
-proc generateAtomicProp*(): PropLogicFormula = 
+proc generateAtomicProp(id: int): PropLogicFormula = 
   result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
-    id: nextPropId
+    id: id
   )
-  nextPropId += 1
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation) == TOP
 
-proc getAllInterpretations*(propsId: HashSet[int]): seq[Interpretation] = 
+proc getAllInterpretations(numberOfFormulae: int): seq[Interpretation] = 
   let 
-    numberOfFormulae = propsId.len
     numberOfInterpretation = 1 shl numberOfFormulae
-    allPropIds = propsId.toSeq
   for pattern in 0..<numberOfInterpretation:
     var interpretation = initTable[int, TruthVaue]()
-    for idx in 0..<numberOfFormulae:
-      interpretation[allPropIds[idx]] = if (pattern and (1 shl idx)) > 0: TOP else: BOTTOM
+    for id in 0..<numberOfFormulae:
+      interpretation[id] = if (pattern and (1 shl id)) > 0: TOP else: BOTTOM
     result.add(interpretation)
+
+proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
+  let
+    formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
+    interpretation = numberOfFormulae.getAllInterpretations()
+  return (formulae, interpretation)
 
 proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation]): seq[Interpretation] =
   interpretations.filterIt(formula.isSat(it))
