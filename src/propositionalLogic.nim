@@ -2,3 +2,5 @@ type
   PropLogicFormula* = ref object of RootObj
   AtomicProp* = ref object of PropLogicFormula
     id*: int
+  AndFormula* = ref object of PropLogicFormula
+    left*, right*: PropLogicFormula
