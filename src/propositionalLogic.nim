@@ -1,5 +1,6 @@
 import tables
 import sequtils
+import strformat
 
 type
   PropFormulaType {.pure.} = enum
@@ -52,6 +53,19 @@ proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
 
 proc `==`*(left, right: TruthVaue): bool =
   left.value == right.value
+
+proc `$`*(formula: PropLogicFormula): string = 
+  case formula.formulaType
+  of PropFormulaType.atomicProp:
+    $(formula.id)
+  of PropFormulaType.andProp:
+    fmt"({formula.left}&{formula.right})"
+  of PropFormulaType.orProp:
+    fmt"({formula.left}|{formula.right})"
+  of PropFormulaType.notProp:
+    fmt"(!{formula.formula})"
+  of PropFormulaType.impliesProp:
+    fmt"({formula.antecedent}=>{formula.consequent})"
 
 proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue = 
   case formula.formulaType
