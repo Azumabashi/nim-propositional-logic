@@ -45,3 +45,24 @@ proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
     antecedent: antecedent,
     consequent: consequent
   )
+
+proc eval*(formula: PropLogicFormula, interpretation: proc(f: PropLogicFormula): TruthVaue): TruthVaue = 
+  case formula.formulaType
+  of PropFormulaType.atomicProp:
+    interpretation(formula)
+  of PropFormulaType.andProp:
+    TruthVaue(
+      value: formula.left.eval(interpretation) == TOP and formula.right.eval(interpretation) == TOP
+    )
+  of PropFormulaType.orProp:
+    TruthVaue(
+      value: formula.left.eval(interpretation) == TOP or formula.right.eval(interpretation) == TOP
+    )
+  of PropFormulaType.notProp:
+    TruthVaue(
+      value: formula.formula.eval(interpretation) == BOTOM
+    )
+  of PropFormulaType.impliesProp:
+    TruthVaue(
+      value: formula.antecedent.eval(interpretation) == BOTOM or formula.consequent.eval(interpretation) == TOP
+    )
