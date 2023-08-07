@@ -1,0 +1,17 @@
+name: "execute test programs"
+on:
+  pull_request:
+    paths:
+      - 'src/*'
+      - 'tests/*'
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: '2.0.0'
+      - name: execute test programs
+        run: nimble test
