@@ -19,3 +19,6 @@ proc `|`*(left, right: PropLogicFormula): OrFormula =
 
 proc `!`*(formula: PropLogicFormula): NotFormula =
   NotFormula(formula: formula)
+
+proc `=>`*(antecedent, consequent: PropLogicFormula): ImpliesFormula =
+  ImpliesFormula(antecedent: antecedent, consequent: consequent)
