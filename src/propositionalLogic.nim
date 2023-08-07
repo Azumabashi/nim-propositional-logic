@@ -91,3 +91,6 @@ proc getAllInterpretations*(props: HashSet[PropLogicFormula]): seq[Interpretatio
     for idx in 0..<numberOfFormulae:
       interpretation[allPropIds[idx]] = if (pattern and (1 shl idx)) > 0: TOP else: BOTTOM
     result.add(interpretation)
+
+proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation]): seq[Interpretation] =
+  interpretations.filterIt(formula.isSat(it))
