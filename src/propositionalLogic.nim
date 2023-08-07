@@ -81,9 +81,6 @@ proc generateAtomicProp(id: int): PropLogicFormula =
     id: id
   )
 
-proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
-  formula.eval(interpretation) == TOP
-
 proc getAllInterpretations(numberOfFormulae: int): seq[Interpretation] = 
   let 
     numberOfInterpretation = 1 shl numberOfFormulae
@@ -98,6 +95,9 @@ proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) 
     formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
     interpretation = numberOfFormulae.getAllInterpretations()
   return (formulae, interpretation)
+
+proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
+  formula.eval(interpretation) == TOP
 
 proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation]): seq[Interpretation] =
   interpretations.filterIt(formula.isSat(it))
