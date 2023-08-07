@@ -83,11 +83,11 @@ proc generateAtomicProp*(): PropLogicFormula =
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation).value == TOP.value
 
-proc getAllInterpretations*(props: HashSet[PropLogicFormula]): seq[Interpretation] = 
+proc getAllInterpretations*(propsId: HashSet[int]): seq[Interpretation] = 
   let 
-    numberOfFormulae = props.len
+    numberOfFormulae = propsId.len
     numberOfInterpretation = 1 shl numberOfFormulae
-    allPropIds = props.toSeq.filterIt(it.formulaType == PropFormulaType.atomicProp).mapIt(it.id)
+    allPropIds = propsId.toSeq
   for pattern in 0..<numberOfInterpretation:
     var interpretation = initTable[int, TruthVaue]()
     for idx in 0..<numberOfFormulae:
