@@ -1,4 +1,6 @@
 type
+  PropFormulaType* {.pure.} = enum
+    atomicProp, andProp, orProp, notProp, impliesProp
   PropLogicFormula* = ref object of RootObj
   AtomicProp* = ref object of PropLogicFormula
     id*: int
