@@ -1,16 +1,13 @@
 import unittest
-import sets
-import sequtils
 
 import propositionalLogic
 suite "check satisfiability under specific interpretation":
   setup:
     let 
-      P = generateAtomicProp()
-      Q = generateAtomicProp()
-      R = generateAtomicProp()
-      allProps = @[P, Q, R]
-      allInterpretations = allProps.mapIt(it.id).toHashSet.getAllInterpretations()
+      (allFormulae, allInterpretations) = init(3)
+      P = allFormulae[0]
+      Q = allFormulae[1]
+      R = allFormulae[2]
   
   test "excluded middle law":
     let formula = P | (!P)
