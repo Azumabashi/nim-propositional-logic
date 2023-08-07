@@ -1,6 +1,5 @@
 import tables
 import sequtils
-import sets
 
 type
   PropFormulaType {.pure.} = enum
