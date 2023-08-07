@@ -8,3 +8,5 @@ type
     left*, right*: PropLogicFormula
   NotFormula* = ref object of PropLogicFormula
     formula*: PropLogicFormula
+  ImpliesFormula* = ref object of PropLogicFormula
+    antecedent*, consequent*: PropLogicFormula
