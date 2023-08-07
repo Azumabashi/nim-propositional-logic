@@ -96,3 +96,6 @@ proc getAllInterpretations*(props: HashSet[PropLogicFormula]): seq[Interpretatio
 
 proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation]): seq[Interpretation] =
   interpretations.filterIt(formula.isSat(it))
+
+proc isTautology*(formula: PropLogicFormula, interpretations: seq[Interpretation]): bool = 
+  formula.getModels(interpretations).len == interpretations.len
