@@ -116,15 +116,6 @@ proc generateAtomicProp(id: int): PropLogicFormula =
     id: id
   )
 
-proc getAllInterpretations(numberOfFormulae: int): seq[Interpretation] = 
-  let 
-    numberOfInterpretation = 1 shl numberOfFormulae
-  for pattern in 0..<numberOfInterpretation:
-    var interpretation = initTable[int, TruthVaue]()
-    for id in 0..<numberOfFormulae:
-      interpretation[id] = if (pattern and (1 shl id)) > 0: TOP else: BOTTOM
-    result.add(interpretation)
-
 proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
   let
     formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
