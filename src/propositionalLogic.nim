@@ -128,7 +128,7 @@ proc getAllInterpretations(numberOfFormulae: int): seq[Interpretation] =
 proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
   let
     formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
-    interpretation = numberOfFormulae.getAllInterpretations()
+    interpretation = interpretations(formulae).toSeq
   return (formulae, interpretation)
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
