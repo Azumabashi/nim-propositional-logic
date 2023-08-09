@@ -130,3 +130,12 @@ proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation])
 
 proc isTautology*(formula: PropLogicFormula, interpretations: seq[Interpretation]): bool = 
   formula.getModels(interpretations).len == interpretations.len
+
+iterator interpretations(formulae: seq[PropLogicFormula]): Interpretation =
+  let 
+    numberOfInterpretation = 1 shl (formulae.len)
+  for pattern in 0..<numberOfInterpretation:
+    var interpretation = initTable[int, TruthVaue]()
+    for idx in 0..<formulae.len:
+      interpretation[formulae[idx].id] = if (pattern and (1 shl idx)) > 0: TOP else: BOTTOM
+    yield interpretation
