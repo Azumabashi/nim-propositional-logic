@@ -54,6 +54,19 @@ proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
 proc `==`*(left, right: TruthVaue): bool =
   left.value == right.value
 
+proc `==`*(left, right: PropLogicFormula): bool = 
+  if left.formulaType != right.formulaType:
+    return false
+  case left.formulaType
+  of PropFormulaType.atomicProp:
+    return left.id == right.id
+  of PropFormulaType.andProp, PropFormulaType.orProp:
+    return left.left == right.left and left.right == right.right
+  of PropFormulaType.notProp:
+    return left.formula == right.formula
+  of PropFormulaType.impliesProp:
+    return left.antecedent == right.antecedent and left.consequent == right.consequent
+
 proc `$`*(formula: PropLogicFormula): string = 
   case formula.formulaType
   of PropFormulaType.atomicProp:
