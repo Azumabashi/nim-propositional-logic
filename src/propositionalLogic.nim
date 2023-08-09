@@ -24,6 +24,15 @@ let
   TOP* = TruthVaue(value: true)
   BOTTOM* = TruthVaue(value: false)
 
+iterator interpretations(formulae: seq[PropLogicFormula]): Interpretation =
+  let 
+    numberOfInterpretation = 1 shl (formulae.len)
+  for pattern in 0..<numberOfInterpretation:
+    var interpretation = initTable[int, TruthVaue]()
+    for idx in 0..<formulae.len:
+      interpretation[formulae[idx].id] = if (pattern and (1 shl idx)) > 0: TOP else: BOTTOM
+    yield interpretation
+
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
   PropLogicFormula(
     formulaType: PropFormulaType.andProp,
@@ -107,19 +116,10 @@ proc generateAtomicProp(id: int): PropLogicFormula =
     id: id
   )
 
-proc getAllInterpretations(numberOfFormulae: int): seq[Interpretation] = 
-  let 
-    numberOfInterpretation = 1 shl numberOfFormulae
-  for pattern in 0..<numberOfInterpretation:
-    var interpretation = initTable[int, TruthVaue]()
-    for id in 0..<numberOfFormulae:
-      interpretation[id] = if (pattern and (1 shl id)) > 0: TOP else: BOTTOM
-    result.add(interpretation)
-
 proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
   let
     formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
-    interpretation = numberOfFormulae.getAllInterpretations()
+    interpretation = interpretations(formulae).toSeq
   return (formulae, interpretation)
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
