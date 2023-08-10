@@ -5,9 +5,8 @@ import propositionalLogic
 suite "check satisfiability under specific interpretation":
   setup:
     let 
-      (allFormulae, _) = init(2)
-      P = allFormulae[0]
-      Q = allFormulae[1]
+      P = generateAtomicProp()
+      Q = generateAtomicProp()
       interpretation = {
         P.id: TOP,
         Q.id: BOTTOM

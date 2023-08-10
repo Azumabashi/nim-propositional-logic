@@ -24,13 +24,18 @@ let
   TOP* = TruthVaue(value: true)
   BOTTOM* = TruthVaue(value: false)
 
-iterator interpretations(formulae: seq[PropLogicFormula]): Interpretation =
+var
+  existingAtomicProps = 0
+
+proc numberOfInterpretations(): int = 1 shl existingAtomicProps
+
+iterator interpretations*(): Interpretation =
   let 
-    numberOfInterpretation = 1 shl (formulae.len)
+    numberOfInterpretation = numberOfInterpretations()
   for pattern in 0..<numberOfInterpretation:
     var interpretation = initTable[int, TruthVaue]()
-    for idx in 0..<formulae.len:
-      interpretation[formulae[idx].id] = if (pattern and (1 shl idx)) > 0: TOP else: BOTTOM
+    for id in 0..<existingAtomicProps:
+      interpretation[id] = if (pattern and (1 shl id)) > 0: TOP else: BOTTOM
     yield interpretation
 
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
@@ -110,30 +115,41 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
       value: formula.antecedent.eval(interpretation) == BOTTOM or formula.consequent.eval(interpretation) == TOP
     )
 
-proc generateAtomicProp(id: int): PropLogicFormula = 
+proc generateAtomicProp*(): PropLogicFormula = 
   result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
-    id: id
+    id: existingAtomicProps
   )
+  existingAtomicProps += 1
 
-proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
-  let
-    formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
-    interpretation = interpretations(formulae).toSeq
-  return (formulae, interpretation)
+proc concatWithAnd(theory: seq[PropLogicFormula]): PropLogicFormula =
+  theory[1..<theory.len].foldl(
+    (a & b),
+    theory[0]
+  )
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation) == TOP
 
 proc isSat*(theory: seq[PropLogicFormula], interpretation: Interpretation): bool =
-  let formula = theory[1..<theory.len].foldl(
-    (a & b),
-    theory[0]
-  )
-  formula.isSat(interpretation)
+  theory.concatWithAnd().isSat(interpretation)
 
-proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation]): seq[Interpretation] =
-  interpretations.filterIt(formula.isSat(it))
+proc getModels*(formula: PropLogicFormula): seq[Interpretation] =
+  for interpretation in interpretations():
+    if formula.isSat(interpretation):
+      result.add(interpretation)
 
-proc isTautology*(formula: PropLogicFormula, interpretations: seq[Interpretation]): bool = 
-  formula.getModels(interpretations).len == interpretations.len
+proc isSat*(formula: PropLogicFormula): bool =
+  formula.getModels().len > 0
+
+proc isSat*(theory: seq[PropLogicFormula]): bool =
+  theory.concatWithAnd().isSat()
+
+proc isTautology*(formula: PropLogicFormula): bool = 
+  formula.getModels().len == numberOfInterpretations()
+
+proc isContradiction*(formula: PropLogicFormula): bool =
+  formula.getModels().len == 0
+
+proc isContradiction*(theory: seq[PropLogicFormula]): bool =
+  theory.concatWithAnd().getModels().len == 0

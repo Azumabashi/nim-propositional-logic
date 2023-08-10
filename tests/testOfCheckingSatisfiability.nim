@@ -4,19 +4,18 @@ import propositionalLogic
 suite "check satisfiability under specific interpretation":
   setup:
     let 
-      (allFormulae, allInterpretations) = init(3)
-      P = allFormulae[0]
-      Q = allFormulae[1]
-      R = allFormulae[2]
+      P = generateAtomicProp()
+      Q = generateAtomicProp()
+      R = generateAtomicProp()
   
   test "excluded middle law":
     let formula = P | (!P)
-    check formula.isTautology(allInterpretations)
+    check formula.isTautology()
   
   test "unsat formula":
     let formula = P & (!P)
-    check formula.getModels(allInterpretations).len == 0
+    check formula.isContradiction()
   
   test "satisfiable formula":
     let formula = P & (Q => (!R))
-    check formula.getModels(allInterpretations).len > 0
+    check formula.isSat()
