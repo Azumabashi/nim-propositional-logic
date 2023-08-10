@@ -33,5 +33,4 @@ suite "check satisfiablity for theory":
   test "theory contains formulae with contradiction":
     let 
       theory = @[P, !P]
-    for interpretation in interpretations():
-      check not theory.isSat(interpretation)
+    check theory.isContradiction()

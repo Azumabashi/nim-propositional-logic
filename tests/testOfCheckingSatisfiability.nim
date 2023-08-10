@@ -14,8 +14,8 @@ suite "check satisfiability under specific interpretation":
   
   test "unsat formula":
     let formula = P & (!P)
-    check formula.getModels().len == 0
+    check formula.isContradiction()
   
   test "satisfiable formula":
     let formula = P & (Q => (!R))
-    check formula.getModels().len > 0
+    check formula.isSat()
