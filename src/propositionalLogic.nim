@@ -122,15 +122,17 @@ proc generateAtomicProp*(): PropLogicFormula =
   )
   existingAtomicProps += 1
 
+proc concatWithAnd(theory: seq[PropLogicFormula]): PropLogicFormula =
+  theory[1..<theory.len].foldl(
+    (a & b),
+    theory[0]
+  )
+
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation) == TOP
 
 proc isSat*(theory: seq[PropLogicFormula], interpretation: Interpretation): bool =
-  let formula = theory[1..<theory.len].foldl(
-    (a & b),
-    theory[0]
-  )
-  formula.isSat(interpretation)
+  theory.concatWithAnd().isSat(interpretation)
 
 proc getModels*(formula: PropLogicFormula): seq[Interpretation] =
   for interpretation in interpretations():
