@@ -113,7 +113,7 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
       value: formula.antecedent.eval(interpretation) == BOTTOM or formula.consequent.eval(interpretation) == TOP
     )
 
-proc generateAtomicProp(id: int): PropLogicFormula = 
+proc generateAtomicProp*(id: int): PropLogicFormula = 
   result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
     id: existingAtomicProps
