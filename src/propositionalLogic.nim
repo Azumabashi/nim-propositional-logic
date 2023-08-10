@@ -147,3 +147,9 @@ proc isSat*(theory: seq[PropLogicFormula]): bool =
 
 proc isTautology*(formula: PropLogicFormula): bool = 
   formula.getModels().len == numberOfInterpretations()
+
+proc isContradiction*(formula: PropLogicFormula): bool =
+  formula.getModels().len == 0
+
+proc isContradiction*(theory: seq[PropLogicFormula]): bool =
+  theory.concatWithAnd().getModels().len == 0
