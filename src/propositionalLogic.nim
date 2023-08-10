@@ -139,5 +139,11 @@ proc getModels*(formula: PropLogicFormula): seq[Interpretation] =
     if formula.isSat(interpretation):
       result.add(interpretation)
 
+proc isSat*(formula: PropLogicFormula): bool =
+  formula.getModels().len > 0
+
+proc isSat*(theory: seq[PropLogicFormula]): bool =
+  theory.concatWithAnd().isSat()
+
 proc isTautology*(formula: PropLogicFormula): bool = 
   formula.getModels().len == numberOfInterpretations()
