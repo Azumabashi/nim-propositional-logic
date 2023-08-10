@@ -27,9 +27,11 @@ let
 var
   existingAtomicProps = 0
 
+proc numberOfInterpretations(): int = 1 shl existingAtomicProps
+
 iterator interpretations(): Interpretation =
   let 
-    numberOfInterpretation = 1 shl existingAtomicProps
+    numberOfInterpretation = numberOfInterpretations()
   for pattern in 0..<numberOfInterpretation:
     var interpretation = initTable[int, TruthVaue]()
     for id in 0..<existingAtomicProps:
@@ -134,4 +136,4 @@ proc getModels*(formula: PropLogicFormula): seq[Interpretation] =
   interpretations().toSeq.filterIt(formula.isSat(it))
 
 proc isTautology*(formula: PropLogicFormula): bool = 
-  formula.getModels().len == (1 shl existingAtomicProps)
+  formula.getModels().len == numberOfInterpretations()
