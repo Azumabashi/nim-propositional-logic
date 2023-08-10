@@ -29,7 +29,7 @@ var
 
 proc numberOfInterpretations(): int = 1 shl existingAtomicProps
 
-iterator interpretations(): Interpretation =
+iterator interpretations*(): Interpretation =
   let 
     numberOfInterpretation = numberOfInterpretations()
   for pattern in 0..<numberOfInterpretation:
