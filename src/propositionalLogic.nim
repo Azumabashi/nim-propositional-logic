@@ -126,7 +126,7 @@ proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool =
   formula.eval(interpretation) == TOP
 
 proc isSat*(theory: seq[PropLogicFormula], interpretation: Interpretation): bool =
-  let formula = theory[2..<theory.len].foldl(
+  let formula = theory[1..<theory.len].foldl(
     (a & b),
     theory[0]
   )
