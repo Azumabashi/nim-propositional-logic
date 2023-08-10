@@ -25,7 +25,7 @@ let
   BOTTOM* = TruthVaue(value: false)
 
 var
-  nextAtomicPropId = 0
+  existingAtomicProps = 0
 
 iterator interpretations(formulae: seq[PropLogicFormula]): Interpretation =
   let 
@@ -116,9 +116,9 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
 proc generateAtomicProp(id: int): PropLogicFormula = 
   result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
-    id: nextAtomicPropId
+    id: existingAtomicProps
   )
-  nextAtomicPropId += 1
+  existingAtomicProps += 1
 
 proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
   let
