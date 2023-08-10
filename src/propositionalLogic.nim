@@ -136,8 +136,8 @@ proc isSat*(theory: seq[PropLogicFormula], interpretation: Interpretation): bool
   )
   formula.isSat(interpretation)
 
-proc getModels*(formula: PropLogicFormula, interpretations: seq[Interpretation]): seq[Interpretation] =
-  interpretations.filterIt(formula.isSat(it))
+proc getModels*(formula: PropLogicFormula): seq[Interpretation] =
+  interpretations().toSeq.filterIt(formula.isSat(it))
 
-proc isTautology*(formula: PropLogicFormula, interpretations: seq[Interpretation]): bool = 
-  formula.getModels(interpretations).len == interpretations.len
+proc isTautology*(formula: PropLogicFormula): bool = 
+  formula.getModels().len == (1 shl existingAtomicProps)
