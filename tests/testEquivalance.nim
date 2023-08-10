@@ -5,9 +5,8 @@ import propositionalLogic
 suite "check formula equivalance":
   setup:
     let
-      (formulae, _) = init(2)
-      P = formulae[0]
-      Q = formulae[1]
+      P = generateAtomicProp()
+      Q = generateAtomicProp()
   
   test "P == P":
     check P == P

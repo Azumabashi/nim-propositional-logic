@@ -6,10 +6,9 @@ import propositionalLogic
 suite "check satisfiablity for theory":
   setup:
     let 
-      (allFormulae, allInterpretations) = init(3)
-      P = allFormulae[0]
-      Q = allFormulae[1]
-      R = allFormulae[2]
+      P = generateAtomicProp()
+      Q = generateAtomicProp()
+      R = generateAtomicProp()
   
   test "theory contains only atomic formulae":
     let 
@@ -34,5 +33,5 @@ suite "check satisfiablity for theory":
   test "theory contains formulae with contradiction":
     let 
       theory = @[P, !P]
-    for interpretation in allInterpretations:
+    for interpretation in interpretations():
       check not theory.isSat(interpretation)
