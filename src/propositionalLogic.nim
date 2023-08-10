@@ -120,12 +120,6 @@ proc generateAtomicProp(id: int): PropLogicFormula =
   )
   existingAtomicProps += 1
 
-proc init*(numberOfFormulae: int): (seq[PropLogicFormula], seq[Interpretation]) =
-  let
-    formulae = (0..<numberOfFormulae).toSeq.mapIt(it.generateAtomicProp())
-    interpretation = interpretations().toSeq
-  return (formulae, interpretation)
-
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
   formula.eval(interpretation) == TOP
 
