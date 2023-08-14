@@ -18,7 +18,7 @@ jobs:
       - name: generate documentation
         run: nimble doc -o:docs --project --index:on src/propositionalLogic.nim
       - uses: actions/upload-pages-artifact@v1
-         with:
+        with:
            path: docs
   deploy:
     needs: build
