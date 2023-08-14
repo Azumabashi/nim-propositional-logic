@@ -1,6 +1,11 @@
-## This library provides types and procs corresponds to standard propositional logic.
+## This library provides types and procs correspond to standard propositional logic.
 ## Users want to use this library should understand concepts of it (proposition, logical connective, etc.).
-## This document does not include explanations about propositional logic.
+## This document does not include explanations about propositional logic itself.
+## 
+## **Note that the implementation of procedures this library provides is naive and sometimes inefficient** (exponential time).
+## The documentation of such procedures includes notice for "computational complexity".
+## If you need to deal with logical formulae with many atomic propositions or too complex logical formulae,
+## consider using sat solvers.
 runnableExamples:
   import propositionalLogic
 
@@ -21,9 +26,9 @@ type
   PropFormulaType {.pure.} = enum
     atomicProp, andProp, orProp, notProp, impliesProp
   PropLogicFormula* = ref object
-    ## Object corresponds to formula.
-    ## Each formula type (whether given formula is atomic propositional or not, or
-    ## if compound formula, which is top connective) is distinguished as property `formulaType`.
+    ## Object corresponds to logical formulae.
+    ## This object uses a private field to express form (atomic formula, φ∧ψ, φ∨ψ, φ⇒ψ, or ¬φ)
+    ## of the logical formula the instance represents.
     # cf. https://github.com/momeemt/minim/blob/main/src/minim/asts.nim#L16-L47
     case formulaType: PropFormulaType
     of PropFormulaType.atomicProp:
@@ -36,12 +41,11 @@ type
       antecedent*, consequent*: PropLogicFormula
   TruthVaue* = ref object
     ## Object corresponds to truth value.
-    ## Truth value "True" and "False" is represented as `TruthValue(value: true)` and
-    ## `TruthValue(value: false)` respectively.
+    ## Two truth values "True" and "False" are distinguished by the field of this object.
     value*: bool
   Interpretation* = Table[int, TruthVaue]
     ## Type alias represents interpretation.
-    ## The key is id of atomic proposition.
+    ## The key is id of an atomic proposition.
 
 let
   TOP* = TruthVaue(value: true)
@@ -55,7 +59,9 @@ var
 proc numberOfInterpretations(): int = 1 shl existingAtomicProps
 
 iterator interpretations*(): Interpretation =
-  ## Iterator generates all interpretations to all atomic proposition.
+  ## Iterator generates all interpretations to all atomic propositions.
+  ## Be careful of computational complexity (O(N * 2^N) where N is the number of
+  ## atomic propositions).
   runnableExamples:
     import propositionalLogic
 
@@ -66,7 +72,7 @@ iterator interpretations*(): Interpretation =
     
     for interpretation in interpretations():
       assert formula.isSat(interpretation)
-  ## Note that to check whether a formula is tautology, satisfiablity, or contradict,
+  ## Note that to check whether a formula is a tautology, satisfiable, or a contradict,
   ## use proc `isTautology`, `isSat`, or `isContradict` respectively.
   let 
     numberOfInterpretation = numberOfInterpretations()
@@ -110,7 +116,7 @@ proc `|`*(left, right: PropLogicFormula): PropLogicFormula =
 
 proc `!`*(formula: PropLogicFormula): PropLogicFormula =
   ## Logical connective not.
-  ## It is recommended to specify connection order with paren.
+  ## It is recommended to specify connection order with parentheses.
   runnableExamples:
     let
       P = generateAtomicProp()
@@ -123,7 +129,7 @@ proc `!`*(formula: PropLogicFormula): PropLogicFormula =
 
 proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
   ## Logical connective implies.
-  ## It is recommended to specify connection order with paren.
+  ## It is recommended to specify connection order with parentheses.
   runnableExamples:
     let
       P = generateAtomicProp()
@@ -211,7 +217,7 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthVaue
     )
 
 proc generateAtomicProp*(): PropLogicFormula = 
-  ## Generate atomic proposition.
+  ## Generate an atomic proposition.
   result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
     id: existingAtomicProps
@@ -225,37 +231,43 @@ proc concatWithAnd(theory: seq[PropLogicFormula]): PropLogicFormula =
   )
 
 proc isSat*(formula: PropLogicFormula, interpretation: Interpretation): bool = 
-  ## Returns `true` if given formula becomes true under given interpretation and `false` otherwise.
+  ## Returns `true` if the given formula is true under the given interpretation and `false` otherwise.
   formula.eval(interpretation) == TOP
 
 proc isSat*(theory: seq[PropLogicFormula], interpretation: Interpretation): bool =
-  ## Returns `true` if all formulae included in given theory becomes true under given interpretation and `false` otherwise.
+  ## Returns `true` if all formulae included in the given theory becomes true under the given interpretation and `false` otherwise.
   theory.concatWithAnd().isSat(interpretation)
 
 proc getModels*(formula: PropLogicFormula): seq[Interpretation] =
-  ## Returns all models to given `formula`.
+  ## Returns all models to the given `formula`.
+  ## Be careful of computational complexity.
   for interpretation in interpretations():
     if formula.isSat(interpretation):
       result.add(interpretation)
 
 proc isSat*(formula: PropLogicFormula): bool =
-  ## Returns `true` if given formula is satisfiable and `false` otherwise.
+  ## Returns `true` if the given formula is satisfiable and `false` otherwise.
+  ## Be careful of computational complexity.
   formula.getModels().len > 0
 
 proc isSat*(theory: seq[PropLogicFormula]): bool =
-  ## Returns `true` if given theory is satisfiable  (i.e. all formulae
-  ## included in given theory are satisfiable by the same interpretation)
+  ## Returns `true` if the given theory is satisfiable  (i.e. all formulae
+  ## included in the given theory are satisfiable by the same interpretation)
   ## and `false` otherwise.
+  ## Be careful of computational complexity.
   theory.concatWithAnd().isSat()
 
 proc isTautology*(formula: PropLogicFormula): bool = 
-  ## Returns `true` if given formula is tautology and `false` otherwise.
+  ## Returns `true` if the given formula is tautology and `false` otherwise.
+  ## Be careful of computational complexity.
   formula.getModels().len == numberOfInterpretations()
 
 proc isContradiction*(formula: PropLogicFormula): bool =
-  ## Returns `true` if given formula is contradiction and `false` otherwise.
+  ## Returns `true` if given the formula contradicts and `false` otherwise.
+  ## Be careful of computational complexity.
   formula.getModels().len == 0
 
 proc isContradiction*(theory: seq[PropLogicFormula]): bool =
-  ## Returns `true` if given theory is contradiction and `false` otherwise.
+  ## Returns `true` if the given theory contradicts and `false` otherwise.
+  ## Be careful of computational complexity.
   theory.concatWithAnd().getModels().len == 0
