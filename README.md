@@ -9,7 +9,7 @@ nimble install https://github.com/Azumabashi/nim-propositional-logic
 Installing this library via [nimble.directory](https://nimble.directory) will soon be available.
 
 ## Usage
-You can refer the documentation of this libary [here](https://azumabashi.github.io/nim-propositional-logic/).
+You can refer the documentation of this libary [here](https://azumabashi.github.io/nim-propositional-logic/propositionalLogic.html).
 
 Also, test programs could be additional examples of how to use this library.
 
