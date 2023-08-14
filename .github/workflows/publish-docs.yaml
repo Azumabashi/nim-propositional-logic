@@ -1,0 +1,36 @@
+name: "publish documentation"
+on:
+  push:
+    paths:
+      - 'propositionalLogic.nimble'
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[release]')"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: '2.0.0'
+      - name: generate documentation
+        run: nimble doc -o:docs --project --index:on src/propositionalLogic.nim
+      - uses: actions/upload-pages-artifact@v1
+         with:
+           path: docs
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[release]')"
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
