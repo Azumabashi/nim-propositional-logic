@@ -93,3 +93,12 @@ proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int):
     else:
       mergeResult[topCountInY] = @[ys[idx]]
   return mergeResult
+
+proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
+  let keys = before.keys().toSeq
+  result = initTable[int, seq[seq[InterpretationType]]]()
+  for idx1 in keys:
+    let idx2 = idx1 + 1
+    if not keys.contains(idx2):
+      continue
+    result = result + merge(before[idx1], before[idx2], idx1, idx2)
