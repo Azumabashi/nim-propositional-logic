@@ -4,6 +4,7 @@ import evalUtils
 import truthValue
 import tables
 import sequtils
+import math
 
 type
   InterpretationType {.pure.} = enum
@@ -19,6 +20,9 @@ proc `+`(left, right: TopNumberToITypeSeq): TopNumberToITypeSeq =
           result[count].add(s)
     else:
       result[count] = right[count]
+
+proc countTop(xs: seq[InterpretationType]): int = 
+  xs.mapIt(if it == InterpretationType.top: 1 else: 0).sum()
 
 proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToITypeSeq =
   let numberOfAtomicProps = getNumberOfAtomicProps()
