@@ -22,7 +22,7 @@ import
   propositionalLogic/truthValue,
   propositionalLogic/formulae,
   propositionalLogic/evalUtils,
-  propositionalLogic/interpretation
+  propositionalLogic/interpretationUtils
 
 # List of types/procs/iterators to be exported
 export
