@@ -1,8 +1,8 @@
 type
   TruthValue* = ref object
     ## Object corresponds to truth value.
-    ## Two truth values "True" and "False" are distinguished by the field of this object.
-    value*: bool
+    ## Two truth values "True" and "False" are distinguished by a private field.
+    value: bool
 let
   TOP* = TruthValue(value: true)
     ## Logical constatnt represents `true`.
