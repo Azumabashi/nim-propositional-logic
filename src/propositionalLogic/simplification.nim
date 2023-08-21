@@ -1,3 +1,7 @@
+## This file provides procedure to make the logical formula simpler.
+## Note that the result may not be the simplest form.
+## Be careful of computational complexity.
+
 import formulae
 import interpretationUtils
 import evalUtils
@@ -138,6 +142,10 @@ proc flatten(table: TopNumberToITypeSeq): seq[seq[InterpretationType]] =
     .mapIt(pool[it])
 
 proc simplification*(formula: PropLogicFormula): PropLogicFormula =
+  ## Returns simpler and equivalent formula to given formula.
+  ## This procedure is based on Quine–McCluskey algorithm (just based on).
+  ## **Note that this procedure does not always return the simplest formula.**
+  ## Be careful of computational complexity.
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
     simplicatedResults = itSeq.getTableAfterMerging().flatten()
