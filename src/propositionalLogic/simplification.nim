@@ -7,8 +7,9 @@ import tables
 type
   InterpretationType {.pure.} = enum
     top, bot, dontCare
+  TopNumberToITypeSeq =  Table[int, seq[seq[InterpretationType]]]
 
-proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): Table[int, seq[seq[InterpretationType]]] =
+proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToITypeSeq =
   let numberOfAtomicProps = getNumberOfAtomicProps()
   for interpretation in interpretations():
     if formula.isSat(interpretation):
