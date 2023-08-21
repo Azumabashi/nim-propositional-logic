@@ -102,3 +102,10 @@ proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
     if not keys.contains(idx2):
       continue
     result = result + merge(before[idx1], before[idx2], idx1, idx2)
+
+proc getTableAfterMerging(init: TopNumberToITypeSeq): TopNumberToITypeSeq =
+  result = init
+  var mergeResult = merge(init)
+  while result != mergeResult:
+    result = mergeResult
+    mergeResult = merge(mergeResult)
