@@ -6,6 +6,7 @@ import tables
 import sequtils
 import math
 import algorithm
+import sets
 
 type
   InterpretationType {.pure.} = enum
@@ -17,7 +18,7 @@ proc `+`(left, right: TopNumberToITypeSeq): TopNumberToITypeSeq =
   for count in right.keys():
     if result.hasKey(count):
       for s in right[count]:
-        if result[count].contains(s):
+        if not result[count].contains(s):
           result[count].add(s)
     else:
       result[count] = right[count]
@@ -67,11 +68,14 @@ proc merge(x, y: seq[InterpretationType]): (int, seq[InterpretationType]) =
       newSeq.add(InterpretationType.dontCare)
   return (topCount, newSeq)
 
-proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int): TopNumberToITypeSeq =
+proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int): (TopNumberToITypeSeq, HashSet[int], HashSet[int]) =
   var 
     mergeResult: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
     isYsUsed = repeat(false, ys.len)
-  for x in xs:
+    notUsedXsIdx = initHashSet[int]()
+    notUsedYsIdx = initHashSet[int]()
+  for xIdx in 0..<xs.len:
+    let x = xs[xIdx]
     var isXUsed = false
     for yIdx in 0..<ys.len:
       let y = ys[yIdx]
@@ -80,33 +84,41 @@ proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int):
       isXUsed = true
       isYsUsed[yIdx] = true
       let (topCount, newSeq) = merge(x, y)
-      if mergeResult.hasKey(topCount):
+      if mergeResult.hasKey(topCount) and not mergeResult[topCount].contains(newSeq):
         mergeResult[topCount].add(newSeq)
       else:
         mergeResult[topCount] = @[newSeq]
     if isXUsed:
       continue
-    if mergeResult.hasKey(topCountInX):
-      mergeResult[topCountInX].add(x)
-    else:
-      mergeResult[topCountInX] = @[x]
+    notUsedXsIdx.incl(xIdx)
   for idx in 0..<isYsUsed.len:
     if isYsUsed[idx]:
       continue
-    if mergeResult.hasKey(topCountInY):
-      mergeResult[topCountInY].add(ys[idx])
-    else:
-      mergeResult[topCountInY] = @[ys[idx]]
-  return mergeResult
+    notUsedYsIdx.incl(idx)
+  return (mergeResult, notUsedXsIdx, notUsedYsIdx)
 
 proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
   let keys = before.keys().toSeq
+  var notUsedIdx = repeat((0..<keys.len).toSeq.toHashSet(), keys.len)
   result = initTable[int, seq[seq[InterpretationType]]]()
-  for idx1 in keys:
-    let idx2 = idx1 + 1
-    if not keys.contains(idx2):
+  for idx1 in 0..<keys.len:
+    let 
+      topCount1 = keys[idx1]
+      topCount2 = topCount1 + 1
+      idx2 = keys.find(topCount2)
+    if idx2 == -1:
       continue
-    result = result + merge(before[idx1], before[idx2], idx1, idx2)
+    let (mergeResult, notUsed1, notUsed2) = merge(before[topCount1], before[topCount2], topCount1, topCount2)
+    result = result + mergeResult
+    notUsedIdx[idx1] = notUsed1 * notUsedIdx[idx1]
+    notUsedIdx[idx2] = notUsedIdx[idx2] * notUsed2
+  for idx in 0..<keys.len:
+    let key = keys[idx]
+    for notUsed in notUsedIdx[idx].toSeq():
+      if result.hasKey(key):
+        result[key].add(before[key][notUsed])
+      else:
+        result[key] = @[before[key][notUsed]]
 
 proc getTableAfterMerging(init: TopNumberToITypeSeq): TopNumberToITypeSeq =
   result = init
@@ -144,20 +156,22 @@ proc getMatchTable(befores, candidates: seq[seq[InterpretationType]]): Table[int
         result[beforeIdx].add(candidateIdx)
       else:
         result[beforeIdx] = @[candidateIdx]
+  # key: before, value: list of candidates
 
-proc simplification(formula: PropLogicFormula): PropLogicFormula =
+proc simplification*(formula: PropLogicFormula): PropLogicFormula =
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
-    candidates = itSeq.getTableAfterMerging().flatten()
-    befores = itSeq.flatten()
-  var
-    matchTable = getMatchTable(befores, candidates)
-  let
-    matchTableKey = matchTable.keys().toSeq()
-  var simplificated: seq[int] = @[]
-  for beforeIdx in matchTableKey:
-    if matchTable[beforeIdx].len == 1:
-      simplificated.add(matchTable[beforeIdx][0])
-  for key in matchTableKey:
-    if simplificated.anyIt(matchTable[key].contains(it)):
-      matchTable.del(key)
+    simplicatedResults = itSeq.getTableAfterMerging().flatten()
+  var formulae: seq[PropLogicFormula] = @[]
+  for simplicatedResult in simplicatedResults:
+    var propositions: seq[PropLogicFormula] = @[]
+    for idx in 0..<simplicatedResult.len:
+      case simplicatedResult[idx]
+      of InterpretationType.top:
+        propositions.add(generateAtomicPropWithGivenId(idx))
+      of InterpretationType.bot:
+        propositions.add(!generateAtomicPropWithGivenId(idx))
+      else:
+        discard
+    formulae.add(propositions.foldl(a & b))
+  formulae.foldl(a | b)
