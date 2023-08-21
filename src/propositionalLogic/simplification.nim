@@ -137,16 +137,6 @@ proc flatten(table: TopNumberToITypeSeq): seq[seq[InterpretationType]] =
     .sorted(proc(x, y: int): int = cmp(pool[x].countTop(), pool[y].countTop()))
     .mapIt(pool[it])
 
-proc isMatch(raw, pattern: seq[InterpretationType]): bool = 
-  for i in 0..<raw.len:
-    if pattern[i] == InterpretationType.dontCare:
-      continue
-    elif pattern[i] == raw[i]:
-      continue
-    else:
-      return false
-  return true
-
 proc simplification*(formula: PropLogicFormula): PropLogicFormula =
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
