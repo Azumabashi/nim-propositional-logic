@@ -61,14 +61,25 @@ proc merge(x, y: seq[InterpretationType]): (int, seq[InterpretationType]) =
       newSeq.add(InterpretationType.dontCare)
   return (topCount, newSeq)
 
-proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX: int): TopNumberToITypeSeq =
-  var used: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
+proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int): (TopNumberToITypeSeq, TopNumberToITypeSeq) =
+  var 
+    used: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
+    mergeResult: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
   for x in xs:
     for y in ys:
       if not canMerge(x, y):
         continue
-      let (topCount, newSeq) = merge(x, y)
-      if result.hasKey(topCount):
-        result[topCount].add(newSeq)
+      if used.hasKey(topCountInX):
+        used[topCountInX].add(x)
       else:
-        result[topCount] = @[newSeq]
+        used[topCountInX] = @[x]
+      if used.hasKey(topCountInY):
+        used[topCountInY].add(y)
+      else:
+        used[topCountInY] = @[y]
+      let (topCount, newSeq) = merge(x, y)
+      if mergeResult.hasKey(topCount):
+        mergeResult[topCount].add(newSeq)
+      else:
+        mergeResult[topCount] = @[newSeq]
+  return (mergeResult, used)
