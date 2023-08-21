@@ -124,10 +124,16 @@ proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
       else:
         result[key] = @[before[key][notUsed]]
 
+proc compare(left, right: TopNumberToITypeSeq): bool = 
+  if left.keys.toSeq.toHashSet != right.keys.toSeq.toHashSet:
+    return false
+  let keys = left.keys.toSeq
+  return keys.allIt(left[it].toHashSet == right[it].toHashSet)
+
 proc getTableAfterMerging(init: TopNumberToITypeSeq): TopNumberToITypeSeq =
   result = init
   var mergeResult = merge(init)
-  while result != mergeResult:
+  while not compare(result, mergeResult):
     result = mergeResult
     mergeResult = merge(mergeResult)
 
@@ -148,6 +154,7 @@ proc simplification*(formula: PropLogicFormula): PropLogicFormula =
   ## Be careful of computational complexity.
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
+  let
     simplicatedResults = itSeq.getTableAfterMerging().flatten()
   var formulae: seq[PropLogicFormula] = @[]
   for simplicatedResult in simplicatedResults:
