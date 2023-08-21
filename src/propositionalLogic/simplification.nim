@@ -109,3 +109,8 @@ proc getTableAfterMerging(init: TopNumberToITypeSeq): TopNumberToITypeSeq =
   while result != mergeResult:
     result = mergeResult
     mergeResult = merge(mergeResult)
+
+proc simplification(formula: PropLogicFormula): PropLogicFormula =
+  let 
+    itSeq = formula.formulaToInterpretationTypeSeq()
+    candidates = itSeq.getTableAfterMerging()
