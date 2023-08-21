@@ -5,6 +5,7 @@ import truthValue
 import tables
 import sequtils
 import math
+import algorithm
 
 type
   InterpretationType {.pure.} = enum
@@ -115,9 +116,14 @@ proc getTableAfterMerging(init: TopNumberToITypeSeq): TopNumberToITypeSeq =
     mergeResult = merge(mergeResult)
 
 proc flatten(table: TopNumberToITypeSeq): seq[seq[InterpretationType]] =
+  var pool: seq[seq[InterpretationType]] = @[]
   for key in table.keys():
     for content in table[key]:
-      result.add(content)
+      pool.add(content)
+  result = (0..<pool.len)
+    .toSeq()
+    .sorted(proc(x, y: int): int = cmp(pool[x].countTop(), pool[y].countTop()))
+    .mapIt(pool[it])
 
 proc simplification(formula: PropLogicFormula): PropLogicFormula =
   let 
