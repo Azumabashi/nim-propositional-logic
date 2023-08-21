@@ -150,3 +150,12 @@ proc simplification(formula: PropLogicFormula): PropLogicFormula =
     itSeq = formula.formulaToInterpretationTypeSeq()
     candidates = itSeq.getTableAfterMerging().flatten()
     befores = itSeq.flatten()
+  var
+    matchTable = getMatchTable(befores, candidates)
+  let
+    matchTableKey = matchTable.keys().toSeq()
+  var simplificated: seq[int] = @[]
+  for beforeIdx in matchTableKey:
+    if matchTable[beforeIdx].len == 1:
+      simplificated.add(matchTable[beforeIdx][0])
+      matchTable.del(beforeIdx)
