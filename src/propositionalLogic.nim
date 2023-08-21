@@ -22,11 +22,13 @@ import
   propositionalLogic/truthValue,
   propositionalLogic/formulae,
   propositionalLogic/evalUtils,
-  propositionalLogic/interpretationUtils
+  propositionalLogic/interpretationUtils,
+  propositionalLogic/simplification
 
 # List of types/procs/iterators to be exported
 export
   TruthValue, TOP, BOTTOM, `==`, `and`, `or`, `not`,
   PropLogicFormula, generateAtomicProp, `&`, `|`, `=>`, `!`, `$`, recByStructure,
   isSat, getModels, isTautology, isContradiction,
-  interpretations, getModels
+  interpretations, getModels,
+  simplification

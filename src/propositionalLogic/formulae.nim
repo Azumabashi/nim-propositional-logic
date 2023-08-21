@@ -33,6 +33,12 @@ proc generateAtomicProp*(): PropLogicFormula =
   )
   existingAtomicProps += 1
 
+proc generateAtomicPropWithGivenId*(id: int): PropLogicFormula = 
+  result = PropLogicFormula(
+    formulaType: PropFormulaType.atomicProp,
+    id: id
+  )
+
 proc `&`* (left, right: PropLogicFormula): PropLogicFormula = 
   ## Logical connective and.
   ## It is recommended to specify connection order with paren.
