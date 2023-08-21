@@ -9,6 +9,16 @@ type
     top, bot, dontCare
   TopNumberToITypeSeq =  Table[int, seq[seq[InterpretationType]]]
 
+proc `+`(left, right: TopNumberToITypeSeq): TopNumberToITypeSeq =
+  result = left
+  for count in right.keys():
+    if result.hasKey(count):
+      for s in right[count]:
+        if result[count].contains(s):
+          result[count].add(s)
+    else:
+      result[count] = right[count]
+
 proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToITypeSeq =
   let numberOfAtomicProps = getNumberOfAtomicProps()
   for interpretation in interpretations():
