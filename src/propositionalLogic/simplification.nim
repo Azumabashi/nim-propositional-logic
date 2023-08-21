@@ -3,6 +3,7 @@ import interpretationUtils
 import evalUtils
 import truthValue
 import tables
+import sequtils
 
 type
   InterpretationType {.pure.} = enum
@@ -61,25 +62,34 @@ proc merge(x, y: seq[InterpretationType]): (int, seq[InterpretationType]) =
       newSeq.add(InterpretationType.dontCare)
   return (topCount, newSeq)
 
-proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int): (TopNumberToITypeSeq, TopNumberToITypeSeq) =
+proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int): TopNumberToITypeSeq =
   var 
-    used: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
     mergeResult: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
+    isYsUsed = repeat(false, ys.len)
   for x in xs:
-    for y in ys:
+    var isXUsed = false
+    for yIdx in 0..<ys.len:
+      let y = ys[yIdx]
       if not canMerge(x, y):
         continue
-      if used.hasKey(topCountInX):
-        used[topCountInX].add(x)
-      else:
-        used[topCountInX] = @[x]
-      if used.hasKey(topCountInY):
-        used[topCountInY].add(y)
-      else:
-        used[topCountInY] = @[y]
+      isXUsed = true
+      isYsUsed[yIdx] = true
       let (topCount, newSeq) = merge(x, y)
       if mergeResult.hasKey(topCount):
         mergeResult[topCount].add(newSeq)
       else:
         mergeResult[topCount] = @[newSeq]
-  return (mergeResult, used)
+    if isXUsed:
+      continue
+    if mergeResult.hasKey(topCountInX):
+      mergeResult[topCountInX].add(x)
+    else:
+      mergeResult[topCountInX] = @[x]
+  for idx in 0..<isYsUsed.len:
+    if isYsUsed[idx]:
+      continue
+    if mergeResult.hasKey(topCountInY):
+      mergeResult[topCountInY].add(ys[idx])
+    else:
+      mergeResult[topCountInY] = @[ys[idx]]
+  return mergeResult
