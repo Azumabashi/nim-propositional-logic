@@ -119,3 +119,4 @@ proc simplification(formula: PropLogicFormula): PropLogicFormula =
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
     candidates = itSeq.getTableAfterMerging().flatten()
+    befores = itSeq.flatten()
