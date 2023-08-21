@@ -37,12 +37,16 @@ proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToIType
       else:
         result[numberOfTop] = @[interpretationTypeSeq]
 
-proc hamming(x, y: seq[InterpretationType]): int =
+proc canMerge(x, y: seq[InterpretationType]): bool =
   doAssert x.len == y.len
+  var differs = 0
   for idx in 0..<x.len:
     if (x[idx] == InterpretationType.top and y[idx] == InterpretationType.bot) or
        (x[idx] == InterpretationType.bot and y[idx] == InterpretationType.top):
-      result += 1
+      differs += 1
+    elif x[idx] != y[idx]:
+      return false
+  return differs == 1
 
 proc merge(x, y: seq[InterpretationType]): (int, seq[InterpretationType]) =
   var 
@@ -57,10 +61,11 @@ proc merge(x, y: seq[InterpretationType]): (int, seq[InterpretationType]) =
       newSeq.add(InterpretationType.dontCare)
   return (topCount, newSeq)
 
-proc merge(xs, ys: seq[seq[InterpretationType]]): TopNumberToITypeSeq =
+proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX: int): TopNumberToITypeSeq =
+  var used: TopNumberToITypeSeq = initTable[int, seq[seq[InterpretationType]]]()
   for x in xs:
     for y in ys:
-      if hamming(x, y) != 1:
+      if not canMerge(x, y):
         continue
       let (topCount, newSeq) = merge(x, y)
       if result.hasKey(topCount):
