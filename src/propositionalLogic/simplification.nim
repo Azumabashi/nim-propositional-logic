@@ -36,3 +36,9 @@ proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToIType
         result[numberOfTop].add(interpretationTypeSeq)
       else:
         result[numberOfTop] = @[interpretationTypeSeq]
+
+proc hamming(x, y: seq[InterpretationType]): int =
+  doAssert x.len == y.len
+  for idx in 0..<x.len:
+    if x[idx] == y[idx]:
+      result += 1
