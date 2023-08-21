@@ -16,4 +16,4 @@ suite "make logical formula simple":
       simplerFormula = formula.simplification()
   
   test "checking logical equivalence":
-    echo (formula => simplerFormula).isTautology() and (simplerFormula => formula).isTautology()
+    check (formula => simplerFormula).isTautology() and (simplerFormula => formula).isTautology()
