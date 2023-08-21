@@ -3,3 +3,6 @@
 # list of files or directories under VCS
 !*/
 !*.*
+
+# ignore files/directories
+docs
