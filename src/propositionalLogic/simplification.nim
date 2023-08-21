@@ -42,3 +42,23 @@ proc hamming(x, y: seq[InterpretationType]): int =
   for idx in 0..<x.len:
     if x[idx] == y[idx]:
       result += 1
+
+proc merge(xs, ys: seq[seq[InterpretationType]]): TopNumberToITypeSeq =
+  for x in xs:
+    for y in ys:
+      if hamming(x, y) != 1:
+        continue
+      var 
+        newSeq: seq[InterpretationType] = @[]
+        topCount = 0
+      for idx in 0..<x.len:
+        if x[idx] == y[idx]:
+          if x[idx] == InterpretationType.top or x[idx] == InterpretationType.bot:
+            topCount += 1
+          newSeq.add(x[idx])
+        else:
+          newSeq.add(InterpretationType.dontCare)
+      if result.hasKey(topCount):
+        result[topCount].add(newSeq)
+      else:
+        result[topCount] = @[newSeq]
