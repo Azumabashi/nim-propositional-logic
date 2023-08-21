@@ -110,7 +110,12 @@ proc getTableAfterMerging(init: TopNumberToITypeSeq): TopNumberToITypeSeq =
     result = mergeResult
     mergeResult = merge(mergeResult)
 
+proc flatten(table: TopNumberToITypeSeq): seq[seq[InterpretationType]] =
+  for key in table.keys():
+    for content in table[key]:
+      result.add(content)
+
 proc simplification(formula: PropLogicFormula): PropLogicFormula =
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
-    candidates = itSeq.getTableAfterMerging()
+    candidates = itSeq.getTableAfterMerging().flatten()
