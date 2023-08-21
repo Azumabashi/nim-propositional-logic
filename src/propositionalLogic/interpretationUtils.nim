@@ -40,6 +40,7 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthValu
   ## if the formula is true under the interpretation and `BOTTOM` otherwise.
   runnableExamples:
     import tables
+    import propositionalLogic
     let
       P = generateAtomicProp()
       Q = generateAtomicProp()

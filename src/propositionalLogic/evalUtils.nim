@@ -1,5 +1,5 @@
 import formulae
-import interpretation
+import interpretationUtils
 import truthValue
 import sequtils
 

@@ -41,7 +41,7 @@ proc `&`* (left, right: PropLogicFormula): PropLogicFormula =
       P = generateAtomicProp()
       Q = generateAtomicProp()
       R = generateAtomicProp()
-      formulae = (P & Q) & R
+      formula = (P & Q) & R
       ## This is (P and Q) and R
   PropLogicFormula(
     formulaType: PropFormulaType.andProp,
@@ -57,7 +57,7 @@ proc `|`*(left, right: PropLogicFormula): PropLogicFormula =
       P = generateAtomicProp()
       Q = generateAtomicProp()
       R = generateAtomicProp()
-      formulae = (P | Q) | R
+      formula = (P | Q) | R
       ## This is (P or Q) or R
   PropLogicFormula(
     formulaType: PropFormulaType.orProp,
@@ -71,7 +71,7 @@ proc `!`*(formula: PropLogicFormula): PropLogicFormula =
   runnableExamples:
     let
       P = generateAtomicProp()
-      formulae = !(!P)
+      formula = !(!P)
       ## This is not (not P)
   PropLogicFormula(
     formulaType: PropFormulaType.notProp,
@@ -86,7 +86,7 @@ proc `=>`*(antecedent, consequent: PropLogicFormula): PropLogicFormula =
       P = generateAtomicProp()
       Q = generateAtomicProp()
       R = generateAtomicProp()
-      formulae = P => (Q => R)
+      formula = P => (Q => R)
       ## This is P implies (Q implies R)
   PropLogicFormula(
     formulaType: PropFormulaType.impliesProp,
