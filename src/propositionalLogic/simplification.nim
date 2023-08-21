@@ -40,7 +40,7 @@ proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToIType
 proc hamming(x, y: seq[InterpretationType]): int =
   doAssert x.len == y.len
   for idx in 0..<x.len:
-    if x[idx] == y[idx]:
+    if x[idx] != y[idx]:
       result += 1
 
 proc merge(xs, ys: seq[seq[InterpretationType]]): TopNumberToITypeSeq =
