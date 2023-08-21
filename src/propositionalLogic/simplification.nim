@@ -147,17 +147,6 @@ proc isMatch(raw, pattern: seq[InterpretationType]): bool =
       return false
   return true
 
-proc getMatchTable(befores, candidates: seq[seq[InterpretationType]]): Table[int, seq[int]] =
-  for beforeIdx in 0..<befores.len:
-    for candidateIdx in 0..<candidates.len:
-      if not isMatch(befores[beforeIdx], candidates[candidateIdx]):
-        continue
-      if result.hasKey(beforeIdx):
-        result[beforeIdx].add(candidateIdx)
-      else:
-        result[beforeIdx] = @[candidateIdx]
-  # key: before, value: list of candidates
-
 proc simplification*(formula: PropLogicFormula): PropLogicFormula =
   let 
     itSeq = formula.formulaToInterpretationTypeSeq()
