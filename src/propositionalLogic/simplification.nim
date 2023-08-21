@@ -158,8 +158,6 @@ proc simplification(formula: PropLogicFormula): PropLogicFormula =
   for beforeIdx in matchTableKey:
     if matchTable[beforeIdx].len == 1:
       simplificated.add(matchTable[beforeIdx][0])
-      matchTable.del(beforeIdx)
-  for key in matchTable.keys():
-    for alreadyTaken in simplificated:
-      if matchTable[key].contains(alreadyTaken):
-        matchTable[key].del(alreadyTaken)
+  for key in matchTableKey:
+    if simplificated.anyIt(matchTable[key].contains(it)):
+      matchTable.del(key)
