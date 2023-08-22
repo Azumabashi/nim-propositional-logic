@@ -30,5 +30,5 @@ export
   TruthValue, TOP, BOTTOM, `==`, `and`, `or`, `not`,
   PropLogicFormula, generateAtomicProp, `&`, `|`, `=>`, `!`, `$`, recByStructure,
   isSat, getModels, isTautology, isContradiction,
-  interpretations, getModels,
+  Interpretation, interpretations, getModels,
   simplification
