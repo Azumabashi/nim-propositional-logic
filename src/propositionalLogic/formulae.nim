@@ -34,6 +34,21 @@ proc generateAtomicProp*(): PropLogicFormula =
   existingAtomicProps += 1
 
 proc generateAtomicPropWithGivenId*(id: int): PropLogicFormula = 
+  ## Returns atomic propositions with given id.
+  ## If the atomic propositions which id is given `id` does not exist, this proc raises `AssertionDefect`.
+  ## 
+  ## This procedure is defined to generate new `PropLogicFormula` objects correspond to an existing atomic proposition.
+  ## **Use proc `generateAtomicProp` to generate new atomic propositions**.
+  runnableExamples:
+    import propositionalLogic
+
+    let
+      P = generateAtomicProp()
+      Q = generateAtomicPropWithGivenId(P.id)
+    echo P == Q
+    ## Output:
+    ##   true
+  doAssert 0 <= id and id < existingAtomicProps
   result = PropLogicFormula(
     formulaType: PropFormulaType.atomicProp,
     id: id
