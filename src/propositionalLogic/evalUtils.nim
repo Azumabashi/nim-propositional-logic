@@ -65,5 +65,5 @@ proc iff*(left, right: PropLogicFormula): bool =
       q = generateAtomicProp()
       formula1 = p => q
       formula2 = !p | q
-    check formula1 iff formula2
+    check formula1.iff(formula2)
   ((left => right) & (right => left)).isTautology()
