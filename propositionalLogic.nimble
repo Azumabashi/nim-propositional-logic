@@ -1,6 +1,6 @@
 # Package
 
-version       = "2.2.2"
+version       = "2.3.0"
 author        = "Azumabashi"
 description   = "Library for propositional logic implemented by Nim"
 license       = "MIT"
