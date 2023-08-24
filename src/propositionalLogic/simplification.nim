@@ -88,8 +88,9 @@ proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int):
       isXUsed = true
       isYsUsed[yIdx] = true
       let (topCount, newSeq) = merge(x, y)
-      if mergeResult.hasKey(topCount) and not mergeResult[topCount].contains(newSeq):
-        mergeResult[topCount].add(newSeq)
+      if mergeResult.hasKey(topCount):
+        if not mergeResult[topCount].contains(newSeq):
+          mergeResult[topCount].add(newSeq)
       else:
         mergeResult[topCount] = @[newSeq]
     if isXUsed:
@@ -103,7 +104,9 @@ proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int):
 
 proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
   let keys = before.keys().toSeq
-  var notUsedIdx = repeat((0..<keys.len).toSeq.toHashSet(), keys.len)
+  var notUsedIdx = initTable[int, HashSet[int]]()
+  for key in keys:
+    notUsedIdx[key] = (0..<before[key].len).toSeq.toHashSet()
   result = initTable[int, seq[seq[InterpretationType]]]()
   for idx1 in 0..<keys.len:
     let 
@@ -114,11 +117,10 @@ proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
       continue
     let (mergeResult, notUsed1, notUsed2) = merge(before[topCount1], before[topCount2], topCount1, topCount2)
     result = result + mergeResult
-    notUsedIdx[idx1] = notUsed1 * notUsedIdx[idx1]
-    notUsedIdx[idx2] = notUsedIdx[idx2] * notUsed2
-  for idx in 0..<keys.len:
-    let key = keys[idx]
-    for notUsed in notUsedIdx[idx].toSeq():
+    notUsedIdx[topCount1] = notUsed1 * notUsedIdx[topCount1]
+    notUsedIdx[topCount2] = notUsedIdx[topCount2] * notUsed2
+  for key in keys:
+    for notUsed in notUsedIdx[key].toSeq():
       if result.hasKey(key):
         result[key].add(before[key][notUsed])
       else:
