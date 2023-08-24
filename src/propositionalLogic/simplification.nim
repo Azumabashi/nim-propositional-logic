@@ -120,7 +120,7 @@ proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
     notUsedIdx[idx2] = notUsedIdx[idx2] * notUsed2
   for idx in 0..<keys.len:
     let key = keys[idx]
-    for notUsed in notUsedIdx[idx].toSeq():
+    for notUsed in notUsedIdx[key].toSeq():
       if result.hasKey(key):
         result[key].add(before[key][notUsed])
       else:
