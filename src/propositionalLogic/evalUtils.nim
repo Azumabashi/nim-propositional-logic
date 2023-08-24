@@ -53,3 +53,17 @@ proc isContradiction*(theory: seq[PropLogicFormula]): bool =
   ## Returns `true` if the given theory contradicts and `false` otherwise.
   ## Be careful of computational complexity.
   theory.concatWithAnd().getModels().len == 0
+
+proc `iff`*(left, right: PropLogicFormula): bool =
+  ## Returns `true` if `left` and `right` are logical equivalent, i.e. 
+  ## both `left => right`  and `right => left` are tautology, and
+  ## returns `false` otherwise.
+  runnableExamples:
+    import propositionalLogic
+    let
+      p = generateAtomicProp()
+      q = generateAtomicProp()
+      formula1 = p => q
+      formula2 = !p | q
+    check formula1 iff formula2
+  ((left => right) & (right => left)).isTautology()
