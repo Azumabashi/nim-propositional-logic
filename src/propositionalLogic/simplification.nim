@@ -103,7 +103,9 @@ proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int):
 
 proc merge(before: TopNumberToITypeSeq): TopNumberToITypeSeq =
   let keys = before.keys().toSeq
-  var notUsedIdx = repeat((0..<keys.len).toSeq.toHashSet(), keys.len)
+  var notUsedIdx = initTable[int, HashSet[int]]()
+  for key in keys:
+    notUsedIdx[key] = (0..<before[key].len).toSeq.toHashSet()
   result = initTable[int, seq[seq[InterpretationType]]]()
   for idx1 in 0..<keys.len:
     let 
