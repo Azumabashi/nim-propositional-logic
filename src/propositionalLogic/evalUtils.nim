@@ -54,7 +54,7 @@ proc isContradiction*(theory: seq[PropLogicFormula]): bool =
   ## Be careful of computational complexity.
   theory.concatWithAnd().getModels().len == 0
 
-proc `iff`*(left, right: PropLogicFormula): bool =
+proc iff*(left, right: PropLogicFormula): bool =
   ## Returns `true` if `left` and `right` are logical equivalent, i.e. 
   ## both `left => right`  and `right => left` are tautology, and
   ## returns `false` otherwise.
