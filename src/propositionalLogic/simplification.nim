@@ -88,8 +88,9 @@ proc merge(xs, ys: seq[seq[InterpretationType]], topCountInX, topCountInY: int):
       isXUsed = true
       isYsUsed[yIdx] = true
       let (topCount, newSeq) = merge(x, y)
-      if mergeResult.hasKey(topCount) and not mergeResult[topCount].contains(newSeq):
-        mergeResult[topCount].add(newSeq)
+      if mergeResult.hasKey(topCount):
+        if not mergeResult[topCount].contains(newSeq):
+          mergeResult[topCount].add(newSeq)
       else:
         mergeResult[topCount] = @[newSeq]
     if isXUsed:
