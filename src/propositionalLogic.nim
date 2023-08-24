@@ -29,6 +29,6 @@ import
 export
   TruthValue, TOP, BOTTOM, `==`, `and`, `or`, `not`,
   PropLogicFormula, generateAtomicProp, generateAtomicPropWithGivenId, `&`, `|`, `=>`, `!`, `$`, recByStructure,
-  isSat, getModels, isTautology, isContradiction,
+  isSat, getModels, isTautology, isContradiction, `iff`,
   Interpretation, interpretations, getModels,
   simplification
