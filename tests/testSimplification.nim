@@ -16,3 +16,9 @@ suite "make logical formula simple":
       formula = (!A & B & !C & !D) | (A & !B & !C & !D) | (A & !B & C & !D) | (A & !B & C & D) | (A & B & !C & !D)  | (A & B & C & D)
       simplerFormula = formula.simplification()
     check (formula => simplerFormula).isTautology() and (simplerFormula => formula).isTautology()
+  
+  test "simplificated formula equals given formula":
+    let
+      formula = (A & !B) | (!A & B)
+      simplerFormula = formula.simplification()
+    check (formula => simplerFormula).isTautology() and (simplerFormula => formula).isTautology()
