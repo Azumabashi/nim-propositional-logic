@@ -169,5 +169,9 @@ proc simplification*(formula: PropLogicFormula): PropLogicFormula =
         propositions.add(!generateAtomicPropWithGivenId(idx))
       else:
         discard
-    formulae.add(propositions.foldl(a & b))
-  formulae.foldl(a | b)
+    if propositions.len > 0:
+      formulae.add(propositions.foldl(a & b))
+  if formulae.len > 0:
+    formulae.foldl(a | b)
+  else:
+    formula
