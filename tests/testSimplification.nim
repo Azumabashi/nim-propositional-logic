@@ -22,3 +22,9 @@ suite "make logical formula simple":
       formula = (A & !B) | (!A & B)
       simplerFormula = formula.simplification()
     check (formula => simplerFormula).isTautology() and (simplerFormula => formula).isTautology()
+  
+  test "try to simplify tautology":
+    let
+      formula = A => A
+      simplerFormula = formula.simplification()
+    check simplerFormula.iff(formula)
