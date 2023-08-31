@@ -23,7 +23,8 @@ import
   propositionalLogic/formulae,
   propositionalLogic/evalUtils,
   propositionalLogic/interpretationUtils,
-  propositionalLogic/simplification
+  propositionalLogic/simplification,
+  propositionalLogic/hashUtils
 
 # List of types/procs/iterators to be exported
 export
@@ -31,4 +32,5 @@ export
   PropLogicFormula, generateAtomicProp, generateAtomicPropWithGivenId, `&`, `|`, `=>`, `!`, `$`, recByStructure,
   isSat, getModels, isTautology, isContradiction, iff,
   Interpretation, interpretations, getModels,
-  simplification
+  simplification,
+  hash
