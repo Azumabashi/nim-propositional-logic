@@ -31,6 +31,6 @@ export
   TruthValue, TOP, BOTTOM, `==`, `and`, `or`, `not`,
   PropLogicFormula, generateAtomicProp, generateAtomicPropWithGivenId, `&`, `|`, `=>`, `!`, `$`, recByStructure, getNumberOfAtomicProps,
   isSat, getModels, isTautology, isContradiction, iff,
-  Interpretation, interpretations, getModels, numberOfInterpretations,
+  Interpretation, interpretations, getModels, getNumberOfInterpretations,
   simplification,
   hash
