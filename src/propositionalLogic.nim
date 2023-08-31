@@ -29,7 +29,9 @@ import
 # List of types/procs/iterators to be exported
 export
   TruthValue, TOP, BOTTOM, `==`, `and`, `or`, `not`,
-  PropLogicFormula, generateAtomicProp, generateAtomicPropWithGivenId, `&`, `|`, `=>`, `!`, `$`, recByStructure, getNumberOfAtomicProps,
+  PropLogicFormula, generateAtomicProp, generateAtomicPropWithGivenId,
+  `&`, `|`, `=>`, `!`, `$`, recByStructure, getNumberOfAtomicProps,
+  getId,
   isSat, getModels, isTautology, isContradiction, iff,
   Interpretation, interpretations, getModels, getNumberOfInterpretations,
   simplification,
