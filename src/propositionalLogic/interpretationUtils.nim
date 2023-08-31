@@ -8,7 +8,7 @@ type
     ## Type alias represents interpretation.
     ## The key is id of an atomic proposition.
 
-proc numberOfInterpretations*(atomicProps: int): int =
+proc numberOfInterpretations*(): int =
   runnableExamples:
     import propositionalLogic
 
@@ -16,9 +16,9 @@ proc numberOfInterpretations*(atomicProps: int): int =
       _ = generateAtomicProp()
       _ = generateAtomicProp()
       _ = generateAtomicProp()
-    assert getNumberOfAtomicProps().numberOfInterpretations() == 8
+    assert numberOfInterpretations() == 8
   ## Returns number of interpretations.
-  1 shl atomicProps
+  1 shl getNumberOfAtomicProps()
 
 iterator interpretations*(): Interpretation =
   ## Iterator generates all interpretations to all atomic propositions.
@@ -38,7 +38,7 @@ iterator interpretations*(): Interpretation =
   ## use proc `isTautology`, `isSat`, or `isContradict` respectively.
   let 
     numberOfAtomicProps = getNumberOfAtomicProps()
-    numberOfInterpretation = numberOfAtomicProps.numberOfInterpretations()
+    numberOfInterpretation = numberOfInterpretations()
   for pattern in 0..<numberOfInterpretation:
     var interpretation = initTable[int, TruthValue]()
     for id in 0..<numberOfAtomicProps:
