@@ -23,7 +23,16 @@ type
 var
   existingAtomicProps = 0
 
-proc getNumberOfAtomicProps*(): int = existingAtomicProps
+proc getNumberOfAtomicProps*(): int =
+  runnableExamples:
+    import propositionalLogic
+
+    let
+      _ = generateAtomicProp()
+      _ = generateAtomicProp()
+    assert getNumberOfAtomicProps() == 2
+  ## Returns number of atomic propositions.
+  existingAtomicProps
 
 proc generateAtomicProp*(): PropLogicFormula = 
   ## Generate an atomic proposition.
