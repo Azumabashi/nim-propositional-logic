@@ -1,12 +1,12 @@
 import tables
-import sugar
 import truthValue
-from formulae import getNumberOfAtomicProps, recByStructure, PropLogicFormula
+import formulae
+import hashUtils
 
 type
-  Interpretation* = Table[int, TruthValue]
+  Interpretation* = Table[PropLogicFormula, TruthValue]
     ## Type alias represents interpretation.
-    ## The key is id of an atomic proposition.
+    ## The keys are atomic propositions.
 
 proc getNumberOfInterpretations*(): int =
   runnableExamples:
@@ -40,9 +40,9 @@ iterator interpretations*(): Interpretation =
     numberOfAtomicProps = getNumberOfAtomicProps()
     numberOfInterpretation = getNumberOfInterpretations()
   for pattern in 0..<numberOfInterpretation:
-    var interpretation = initTable[int, TruthValue]()
+    var interpretation = initTable[PropLogicFormula, TruthValue]()
     for id in 0..<numberOfAtomicProps:
-      interpretation[id] = if (pattern and (1 shl id)) > 0: TOP else: BOTTOM
+      interpretation[id.generateAtomicPropWithGivenId()] = if (pattern and (1 shl id)) > 0: TOP else: BOTTOM
     yield interpretation
 
 proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthValue = 
@@ -61,9 +61,9 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthValu
     assert (P | Q).eval(interpretation) == TOP
   recByStructure(
     formula,
-    formula => interpretation[formula.id],
-    (left, right) => left and right,
-    (left, right) => left or right,
-    (antecedent, consequent) => (not antecedent) or consequent,
-    val => not val
+    proc (formula: PropLogicFormula): TruthValue = interpretation[formula],
+    proc (left, right: TruthValue): TruthValue = left and right,
+    proc (left, right: TruthValue): TruthValue = left or right,
+    proc (antecedent, consequent: TruthValue): TruthValue = (not antecedent) or consequent,
+    proc (val: TruthValue): TruthValue = not val
   )

@@ -38,7 +38,7 @@ proc formulaToInterpretationTypeSeq(formula: PropLogicFormula): TopNumberToIType
         interpretationTypeSeq: seq[InterpretationType] = @[]
         numberOfTop = 0
       for id in 0..<numberOfAtomicProps:
-        if interpretation[id] == TOP:
+        if interpretation[id.generateAtomicPropWithGivenId()] == TOP:
           interpretationTypeSeq.add(InterpretationType.top)
           numberOfTop += 1
         else:
