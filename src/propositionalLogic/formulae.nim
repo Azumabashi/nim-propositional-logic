@@ -24,6 +24,8 @@ var
   existingAtomicProps = 0
 
 proc getId*(formula: PropLogicFormula): int =
+  ## Get id of given atomic proposition.
+  ## If `formula` is not atomic proposition, this procedure raises `AssertionDefect`.
   assert formula.formulaType == PropFormulaType.atomicProp
   formula.id
 
