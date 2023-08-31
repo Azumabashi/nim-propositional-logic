@@ -12,7 +12,7 @@ type
     # cf. https://github.com/momeemt/minim/blob/main/src/minim/asts.nim#L16-L47
     case formulaType: PropFormulaType
     of PropFormulaType.atomicProp:
-      id*: int
+      id: int
     of PropFormulaType.andProp, PropFormulaType.orProp:
       left*, right*: PropLogicFormula
     of PropFormulaType.notProp:
@@ -22,6 +22,10 @@ type
 
 var
   existingAtomicProps = 0
+
+proc getId*(formula: PropLogicFormula): int =
+  assert formula.formulaType == PropFormulaType.atomicProp
+  formula.id
 
 proc getNumberOfAtomicProps*(): int =
   runnableExamples:

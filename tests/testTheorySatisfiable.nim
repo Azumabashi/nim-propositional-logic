@@ -14,9 +14,9 @@ suite "check satisfiablity for theory":
     let 
       theory = @[P, Q, R]
       interpretation = {
-        P.id: TOP,
-        Q.id: TOP,
-        R.id: TOP
+        P: TOP,
+        Q: TOP,
+        R: TOP
       }.toTable
     check theory.isSat(interpretation)
   
@@ -24,9 +24,9 @@ suite "check satisfiablity for theory":
     let 
       theory = @[P => Q, !Q => P | R, P & R]
       interpretation = {
-        P.id: TOP,
-        Q.id: TOP,
-        R.id: TOP
+        P: TOP,
+        Q: TOP,
+        R: TOP
       }.toTable
     check theory.isSat(interpretation)
   

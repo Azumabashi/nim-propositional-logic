@@ -8,8 +8,8 @@ suite "check satisfiability under specific interpretation":
       P = generateAtomicProp()
       Q = generateAtomicProp()
       interpretation = {
-        P.id: TOP,
-        Q.id: BOTTOM
+        P: TOP,
+        Q: BOTTOM
       }.toTable
   
   test "excluded middle law":
