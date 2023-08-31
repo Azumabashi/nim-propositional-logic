@@ -8,7 +8,7 @@ type
     ## Type alias represents interpretation.
     ## The key is id of an atomic proposition.
 
-proc numberOfInterpretations(atomicProps: int): int = 1 shl atomicProps
+proc numberOfInterpretations*(atomicProps: int): int = 1 shl atomicProps
 
 iterator interpretations*(): Interpretation =
   ## Iterator generates all interpretations to all atomic propositions.
