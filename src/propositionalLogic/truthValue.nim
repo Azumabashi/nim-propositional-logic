@@ -28,3 +28,8 @@ proc `or`*(left, right: TruthValue): TruthValue =
 proc `not`*(val: TruthValue): TruthValue =
   ## Returns `BOTTOM` if `val` is `TOP` and `TOP` otherwise.
   if val == TOP: BOTTOM else: TOP
+
+proc `$`*(val: TruthValue): string =
+  ## Stringify procedure for `TruthValue`. 
+  ## Returns `"T"` if `val` is `TOP` and `"F"` otherwise.
+  if val == TOP: "T" else: "F"
