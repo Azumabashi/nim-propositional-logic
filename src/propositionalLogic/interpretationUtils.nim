@@ -55,8 +55,8 @@ proc eval*(formula: PropLogicFormula, interpretation: Interpretation): TruthValu
       P = generateAtomicProp()
       Q = generateAtomicProp()
       interpretation = {
-        P.id: TOP,
-        Q.id: BOTTOM
+        P: TOP,
+        Q: BOTTOM
       }.toTable
     assert (P | Q).eval(interpretation) == TOP
   recByStructure(

@@ -59,7 +59,7 @@ proc generateAtomicPropWithGivenId*(id: int): PropLogicFormula =
 
     let
       P = generateAtomicProp()
-      Q = generateAtomicPropWithGivenId(P.id)
+      Q = generateAtomicPropWithGivenId(P.getId())
     echo P == Q
     ## Output:
     ##   true
@@ -144,7 +144,7 @@ proc `==`*(left, right: PropLogicFormula): bool =
     return false
   case left.formulaType
   of PropFormulaType.atomicProp:
-    return left.id == right.id
+    return left.getId() == right.getId()
   of PropFormulaType.andProp, PropFormulaType.orProp:
     return left.left == right.left and left.right == right.right
   of PropFormulaType.notProp:
