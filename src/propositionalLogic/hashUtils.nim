@@ -1,8 +1,9 @@
-## This module provides proc `hash` for `PropLogicFormula` (the algorithm of 
+## This module provides proc `hash` for `PropLogicFormula` and `TruthValue` (the algorithm of 
 ## proc `hash` this module provides can be improved).
 
 import hashes
 import formulae
+import truthValue
 
 proc hash*(formula: PropLogicFormula): Hash =
   ## Returns hash value of given `formula`.
@@ -14,3 +15,7 @@ proc hash*(formula: PropLogicFormula): Hash =
     proc (antecedent, consequent: Hash): Hash = ((not antecedent) or consequent).Hash,
     proc (val: Hash): Hash = (not val).Hash
   )
+
+proc hash*(truthValue: TruthValue): Hash =
+  ## Returns hash value of given `truthValue`.
+  if truthValue == TOP: 1.Hash else: 0.Hash
