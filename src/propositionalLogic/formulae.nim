@@ -1,4 +1,5 @@
 import strformat
+import constants
 
 # These type definitions should be here because
 # PropFormulaType is private.
@@ -158,13 +159,13 @@ proc `$`*(formula: PropLogicFormula): string =
   of PropFormulaType.atomicProp:
     $(formula.id)
   of PropFormulaType.andProp:
-    fmt"({formula.left}&{formula.right})"
+    fmt"{leftParen}{formula.left}{andSymbol}{formula.right}{rightParen}"
   of PropFormulaType.orProp:
-    fmt"({formula.left}|{formula.right})"
+    fmt"{leftParen}{formula.left}{orSymbol}{formula.right}{rightParen}"
   of PropFormulaType.notProp:
-    fmt"(!{formula.formula})"
+    fmt"{leftParen}{notSymbol}{formula.formula}{rightParen}"
   of PropFormulaType.impliesProp:
-    fmt"({formula.antecedent}=>{formula.consequent})"
+    fmt"{leftParen}{formula.antecedent}{impliesSymbol}{formula.consequent}{rightParen}"
 
 proc recByStructure*[T](
   formula: PropLogicFormula,
