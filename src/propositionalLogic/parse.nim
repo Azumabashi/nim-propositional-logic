@@ -3,6 +3,7 @@ import formulae
 import deques
 import strutils
 import algorithm
+import tables
 
 proc toReversePolishNotation(formula: string): seq[string] =
   var 
@@ -39,22 +40,42 @@ proc toReversePolishNotation(formula: string): seq[string] =
   for operatorLevelPair in operatorLevelPairs.reversed:
     result.add(operatorLevelPair[0])
 
-proc parse*(formula: string): PropLogicFormula =
-  ## Parse formula expressed as string. The format should be one of `$`,
-  ## i.e. no parentheses can be omitted.
+proc parse*(
+  formula: string, 
+  nameToAtomicFormulae: Table[string, PropLogicFormula]
+): (PropLogicFormula, Table[string, PropLogicFormula]) =
+  ## Parse formula expressed as string. 
+  ## Returns pair of parsed formula and table which maps atomic proposition's name in `formula` to
+  ## atomic propositon expressed as `PropLogicFormula` after parsing.
+  ## 
+  ## The format of `formula` should be one of `$`, i.e. no parentheses can be omitted.
+  ## When atomic propositions are required to get parse result,
+  ## if atomic proposition corresponds to name in `formula` exists in `nameToAtomicFormulae`, 
+  ## `nameToAtomicFormulae[name]` is used. Othwewise, new atomic propositions are generated.
+  ## For more details, see runnable example.
   runnableExamples:
     import propositionalLogic
+    import tables
+    import sets
 
     let
       p = generateAtomicProp()
       q = generateAtomicProp()
-      r = generateAtomicProp()
-      formula = !p => (q & (r | !p))
+      formula = "((!p) => (q | r))"
+      nameToAtomicFormulae = {
+        "p": p,
+        "q": q,
+      }.toTable
+      (parsedFormula, newNameToAtomicFormulae) = formula.parse()
     
-    assert ($formula).parse() == formula
+    assert formula == ($parsedFormula)
+    ## atomic proposition corresponds to `r` is generated automatically.
+    assert newNameToAtomicFormulae.keys().toHashSet() == @["p", "q", "r"].toHashSet()
   
   let reversePolishNotation = formula.toReversePolishNotation()
-  var deque = initDeque[PropLogicFormula]()
+  var 
+    deque = initDeque[PropLogicFormula]()
+    newNameToAtomicFormulae = nameToAtomicFormulae
   for token in reversePolishNotation:
     if token.isOperator():
       case token
@@ -79,9 +100,11 @@ proc parse*(formula: string): PropLogicFormula =
       else:
         assert false, "No procedure for " & token & " exists!"
     elif not token.isParen():
-      let id = token.parseInt()
-      deque.addLast(generateAtomicPropWithGivenId(id))
+      if not newNameToAtomicFormulae.hasKey(token):
+        newNameToAtomicFormulae[token] = generateAtomicProp()
+      deque.addLast(newNameToAtomicFormulae[token])
     else:
       assert false, "Unknown token: " & token
   assert deque.len == 1, "Parse result is not single formula: " & $deque
-  result = deque.popLast()
+  let parseResult = deque.popLast()
+  return (parseResult, newNameToAtomicFormulae)
