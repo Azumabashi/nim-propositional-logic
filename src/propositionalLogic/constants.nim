@@ -11,6 +11,14 @@ proc isOperator*(x: string): bool =
   ## `false` otherwise.
   x == andSymbol or x == orSymbol or x == notSymbol or x == impliesSymbol
 
+proc isOperator*(x: char): bool =
+  ## Proc `isOperator`'s wrapper for `char`.
+  ($x).isOperator()
+
 proc isParen*(x: string): bool =
   ## Returns `true` is `x` is left paren or right paren, and `false` otherwise.
-  x == leftParen and x == rightParen
+  x == leftParen or x == rightParen
+
+proc isParen*(x: char): bool =
+  ## Proc `isParen`'s wrapper for `char`.
+  ($x).isParen()

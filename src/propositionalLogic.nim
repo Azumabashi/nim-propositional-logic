@@ -24,7 +24,8 @@ import
   propositionalLogic/evalUtils,
   propositionalLogic/interpretationUtils,
   propositionalLogic/simplification,
-  propositionalLogic/hashUtils
+  propositionalLogic/hashUtils,
+  propositionalLogic/parse
 
 # List of types/procs/iterators to be exported
 export
@@ -35,4 +36,5 @@ export
   isSat, getModels, isTautology, isContradiction, iff,
   Interpretation, interpretations, getModels, getNumberOfInterpretations,
   simplification,
-  hash
+  hash,
+  parse
