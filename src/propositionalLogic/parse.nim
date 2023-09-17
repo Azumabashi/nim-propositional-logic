@@ -74,7 +74,6 @@ proc parse*(
     assert newNameToAtomicFormulae.keys().toSeq().toHashSet() == @["p", "q", "r"].toHashSet()
   
   let reversePolishNotation = formula.toReversePolishNotation()
-  echo reversePolishNotation
   var 
     deque = initDeque[PropLogicFormula]()
     newNameToAtomicFormulae = nameToAtomicFormulae
