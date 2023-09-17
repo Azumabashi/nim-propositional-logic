@@ -71,7 +71,7 @@ proc parse*(
         "p": p,
         "q": q,
       }.toTable
-      (parsedFormula, newNameToAtomicFormulae) = formula.parse()
+      (parsedFormula, newNameToAtomicFormulae) = formula.parse(nameToAtomicFormulae)
     
     assert formula == ($parsedFormula)
     ## atomic proposition corresponds to `r` is generated automatically.
