@@ -27,7 +27,7 @@ proc toReversePolishNotation(formula: string): seq[string] =
           result.add(operatorLevelPair[0])
         operatorLevelPairs = @[]
       operatorLevelPairs.add((token, level))
-    else:
+    elif token != " ":
       var j = i + 1
       while j < formula.len and not (
         formula[j] == '=' or isOperator(formula[j]) or isParen(formula[j])
@@ -74,6 +74,7 @@ proc parse*(
     assert newNameToAtomicFormulae.keys().toSeq().toHashSet() == @["p", "q", "r"].toHashSet()
   
   let reversePolishNotation = formula.toReversePolishNotation()
+  echo reversePolishNotation
   var 
     deque = initDeque[PropLogicFormula]()
     newNameToAtomicFormulae = nameToAtomicFormulae
