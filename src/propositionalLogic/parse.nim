@@ -19,7 +19,7 @@ proc toReversePolishNotation(formula: string): seq[string] =
     elif token.isOperator() or token == "=":
       if token == "=":
         i += 1
-        assert formula[i] == '>'
+        assert formula[i] == '>', "Unknown token: =" & formula[i]
         token = "=>"
       if operatorLevelPairs.len > 0 and operatorLevelPairs[^1][1] > level:
         for operatorLevelPair in operatorLevelPairs.reversed:
@@ -64,11 +64,11 @@ proc parse*(formula: string): PropLogicFormula =
           antecedent = deque.popLast()
         deque.addLast(antecedent => consequent)
       else:
-        assert false  # This cannot be reached!
+        assert false, "No procedure for " & token & " exists!"
     elif not token.isParen():
       let id = token.parseInt()
       deque.addLast(generateAtomicPropWithGivenId(id))
     else:
-      assert false
-  assert deque.len == 1
+      assert false, "Unknown token: " & token
+  assert deque.len == 1, "Parse result is not single formula: " & $deque
   result = deque.popLast()
