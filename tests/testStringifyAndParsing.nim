@@ -1,5 +1,8 @@
 import unittest
 import strformat
+import tables
+import sets
+import sequtils
 
 import propositionalLogic
 
@@ -9,14 +12,19 @@ suite "Stringify and restoring":
     q = generateAtomicProp()
     r = generateAtomicProp()
     formula = !p => (p | (q & r))
+    pId = p.getId()
+    qId = q.getId()
+    rId = r.getId()
+    nameToAtomicProps = {
+      $pId: p,
+      $qId: q,
+      $rId: r
+    }.toTable()
   
   test "stringify":
-    let
-      pId = p.getId()
-      qId = q.getId()
-      rId = r.getId()
     assert $formula == fmt"((!{pId})=>({pId}|({qId}&{rId})))"
   
   test "restoring":
-    let restored = ($formula).parse()
-    assert restored == formula
+    let (restored, newNameToAtomicProps) = ($formula).parse(nameToAtomicProps)
+    assert $restored == $formula
+    assert newNameToAtomicProps.keys().toSeq().toHashSet() == nameToAtomicProps.keys().toSeq().toHashSet()
