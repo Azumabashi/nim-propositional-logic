@@ -13,4 +13,4 @@ proc isOperator*(x: string): bool =
 
 proc isParen*(x: string): bool =
   ## Returns `true` is `x` is left paren or right paren, and `false` otherwise.
-  x == leftParen and x == rightParen
+  x == leftParen or x == rightParen
