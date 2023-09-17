@@ -57,6 +57,7 @@ proc parse*(
     import propositionalLogic
     import tables
     import sets
+    import sequtils
 
     let
       p = generateAtomicProp()
@@ -70,7 +71,7 @@ proc parse*(
     
     assert formula == ($parsedFormula)
     ## atomic proposition corresponds to `r` is generated automatically.
-    assert newNameToAtomicFormulae.keys().toHashSet() == @["p", "q", "r"].toHashSet()
+    assert newNameToAtomicFormulae.keys().toSeq().toHashSet() == @["p", "q", "r"].toHashSet()
   
   let reversePolishNotation = formula.toReversePolishNotation()
   var 
