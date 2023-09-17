@@ -55,6 +55,8 @@ proc parse*(
   ## if atomic proposition corresponds to name in `formula` exists in `nameToAtomicFormulae`, 
   ## `nameToAtomicFormulae[name]` is used. Othwewise, new atomic propositions are generated.
   ## For more details, see runnable example.
+  ## 
+  ## Note that This procedure uses very naive parsing method and does not construct any AST.
   runnableExamples:
     import propositionalLogic
     import tables
