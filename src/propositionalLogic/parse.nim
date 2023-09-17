@@ -29,7 +29,7 @@ proc toReversePolishNotation(formula: string): seq[string] =
     else:
       var j = i + 1
       while j < formula.len and not (
-        formula[j] == '=' or isOperator($(formula[j])) or isParen($(formula[j]))
+        formula[j] == '=' or isOperator(formula[j]) or isParen(formula[j])
       ):
         j += 1
       result.add(formula[i..<j].strip())
