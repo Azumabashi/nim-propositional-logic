@@ -4,6 +4,8 @@ import deques
 import strutils
 import algorithm
 import tables
+import sequtils
+import math
 
 proc toReversePolishNotation(formula: string): seq[string] =
   var 
@@ -72,6 +74,15 @@ proc parse*(
     assert formula == ($parsedFormula)
     ## atomic proposition corresponds to `r` is generated automatically.
     assert newNameToAtomicFormulae.keys().toSeq().toHashSet() == @["p", "q", "r"].toHashSet()
+  
+  let 
+    logicalConnectiveCount = @[andSymbol, orSymbol, notSymbol, impliesSymbol].mapIt(formula.count(it)).sum()
+    leftParenCount = formula.count(leftParen)
+    rightParenCount = formula.count(rightParen)
+  
+  # simple syntax check
+  assert logicalConnectiveCount == leftParenCount, "number of logical connectives and left parenthesis is different"
+  assert logicalConnectiveCount == rightParenCount, "number of logical connectives and right parenthesis is different"
   
   let reversePolishNotation = formula.toReversePolishNotation()
   var 
