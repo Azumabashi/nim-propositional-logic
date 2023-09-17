@@ -40,6 +40,19 @@ proc toReversePolishNotation(formula: string): seq[string] =
     result.add(operatorLevelPair[0])
 
 proc parse*(formula: string): PropLogicFormula =
+  ## Parse formula expressed as string. The format should be one of `$`,
+  ## i.e. no parentheses can be omitted.
+  runnableExamples:
+    import propositionalLogic
+
+    let
+      p = generateAtomicProp()
+      q = generateAtomicProp()
+      r = generateAtomicProp()
+      formula = !p => (q & (r | !p))
+    
+    assert ($formula).parse() == formula
+  
   let reversePolishNotation = formula.toReversePolishNotation()
   var deque = initDeque[PropLogicFormula]()
   for token in reversePolishNotation:
