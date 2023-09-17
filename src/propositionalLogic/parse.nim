@@ -62,6 +62,7 @@ proc parse*(
     import tables
     import sets
     import sequtils
+    import strutils
 
     let
       p = generateAtomicProp()
@@ -72,8 +73,9 @@ proc parse*(
         "q": q,
       }.toTable
       (parsedFormula, newNameToAtomicFormulae) = formula.parse(nameToAtomicFormulae)
+      idToName = newNameToAtomicFormulae.pairs().toSeq().mapIt(($(it[1].getId()), it[0]))
     
-    assert formula == ($parsedFormula)
+    assert formula.replace(" ", "") == ($parsedFormula).multiReplace(idToName)
     ## atomic proposition corresponds to `r` is generated automatically.
     assert newNameToAtomicFormulae.keys().toSeq().toHashSet() == @["p", "q", "r"].toHashSet()
   
