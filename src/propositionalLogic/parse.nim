@@ -24,9 +24,8 @@ proc toReversePolishNotation(formula: string): seq[string] =
         assert formula[i] == '>', "Unknown token: =" & formula[i]
         token = "=>"
       if operatorLevelPairs.len > 0 and operatorLevelPairs.peekLast()[1] > level:
-        for operatorLevelPair in operatorLevelPairs:
-          if operatorLevelPairs.peekLast()[1] > level:
-            result.add(operatorLevelPairs.popLast()[0])
+        while operatorLevelPairs.len > 0 and operatorLevelPairs.peekLast()[1] > level:
+          result.add(operatorLevelPairs.popLast()[0])
       operatorLevelPairs.addLast((token, level))
     elif token != " ":
       var j = i + 1
