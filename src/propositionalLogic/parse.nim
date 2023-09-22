@@ -85,11 +85,10 @@ proc parse*(
     rightParenCount = formula.count(rightParen)
   
   # simple syntax check
-  # assert logicalConnectiveCount == leftParenCount, "number of logical connectives and left parenthesis is different"
-  # assert logicalConnectiveCount == rightParenCount, "number of logical connectives and right parenthesis is different"
+  assert logicalConnectiveCount == leftParenCount, "number of logical connectives and left parenthesis is different"
+  assert logicalConnectiveCount == rightParenCount, "number of logical connectives and right parenthesis is different"
   
-  #let reversePolishNotation = formula.toReversePolishNotation()
-  let reversePolishNotation = formula.split()
+  let reversePolishNotation = formula.toReversePolishNotation()
   var 
     deque = initDeque[PropLogicFormula]()
     newNameToAtomicFormulae = nameToAtomicFormulae
