@@ -9,7 +9,7 @@ import math
 
 proc toReversePolishNotation(formula: string): seq[string] =
   var 
-    operatorLevelPairs: seq[(string, int)]
+    operatorLevelPairs: Deque[(string, int)]
     level = 0
     i = 0
   
@@ -24,11 +24,11 @@ proc toReversePolishNotation(formula: string): seq[string] =
         i += 1
         assert formula[i] == '>', "Unknown token: =" & formula[i]
         token = "=>"
-      if operatorLevelPairs.len > 0 and operatorLevelPairs[^1][1] > level:
-        for operatorLevelPair in operatorLevelPairs.reversed:
-          result.add(operatorLevelPair[0])
-        operatorLevelPairs = @[]
-      operatorLevelPairs.add((token, level))
+      if operatorLevelPairs.len > 0 and operatorLevelPairs.peekLast()[1] > level:
+        for operatorLevelPair in operatorLevelPairs:
+          if operatorLevelPairs.peekLast()[1] > level:
+            result.add(operatorLevelPairs.popLast()[0])
+      operatorLevelPairs.addLast((token, level))
     elif token != " ":
       var j = i + 1
       while j < formula.len and not (
@@ -39,8 +39,8 @@ proc toReversePolishNotation(formula: string): seq[string] =
       i = j - 1
     i += 1
   
-  for operatorLevelPair in operatorLevelPairs.reversed:
-    result.add(operatorLevelPair[0])
+  while operatorLevelPairs.len > 0:
+    result.add(operatorLevelPairs.popLast()[0])
 
 proc parse*(
   formula: string, 
