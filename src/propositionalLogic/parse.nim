@@ -2,7 +2,6 @@ import constants
 import formulae
 import deques
 import strutils
-import algorithm
 import tables
 import sequtils
 import math
